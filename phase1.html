@@ -2,8 +2,13 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0" />
         <title>phase 1 - html</title>
+        <script defer>
+            // just doing some testing here
+            window.localStorage.setItem("testing!", "teehee!");
+            document.cookie = "testing=teehee";
+        </script>
     </head>
     <font color="#ff0000" face="monospace">
         <body
@@ -69,7 +74,7 @@
                     </p>
                     <details>
                         <summary>huh, never seen this tag before</summary>
-                        very interesting tag we have here! doesn't even need any
+                        very interesting <pre></pre> tag we have here! doesn't even need any
                         javascript to funtion, very handy<br />could use some
                         styling however...
                     </details>
