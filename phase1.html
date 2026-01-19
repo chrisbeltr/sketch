@@ -2,7 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0" />
+        <meta
+            name="viewport"
+            content="width=device-width, minimum-scale=1.0, initial-scale=1.0"
+        />
         <title>phase 1 - html</title>
     </head>
     <font color="#ff0000" face="monospace">
@@ -13,9 +16,14 @@
             background="https://dk2dv4ezy246u.cloudfront.net/widgets/sSzANXNQtKe_large.jpg"
         >
             <center>
-                <marquee behavior="scroll" direction="left">
-                    yoooooo this is literally a depricated html tag i didn't
-                    even know this existed wooooooo
+                <marquee behavior="scroll" direction="right">
+                    <dont color="red">yoooooo</dont> this is
+                    <font color="orange"><big>literally</big></font> a
+                    <font color="yellow">depricated</font>
+                    <font color="green">html tag</font> i
+                    <font color="blue">didn't even know</font> this
+                    <font color="purple"><big>existed</big></font>
+                    <dont color="pink">wooooooo</dont>
                 </marquee>
                 <h1>
                     <select name="main" id="main">
@@ -31,8 +39,8 @@
                     cove
                 </h1>
                 last updated:
-                <time datetime="2025-1-18 4:00"
-                    >January 18th, 2025 at 4:00 AM</time
+                <time datetime="2025-1-19 2:57"
+                    >January 19th, 2025 at 2:57 AM</time
                 >
                 <hr />
                 <main>
@@ -46,41 +54,113 @@
                         there's a <b>lot</b> that i've yet to explore or will
                         ever explore
                     </p>
-                    <p>
-                        i'm having a lot of fun using depricated stuff, like
-                        <a
-                            href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/marquee"
-                            >marquees</a
-                        >
-                        and
-                        <a
-                            href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/font"
-                            >font tags</a
-                        >
-                        and
-                        <a
-                            href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/center"
-                            >center tags</a
-                        >, and i had like <em>no</em> idea these things existed
-                    </p>
-                    <p>
-                        we're also using some depricated attributes up in here,
-                        like the attributes in the body element
-                    </p>
+                    <p>i'm having a lot of fun using depricated stuff:</p>
+                    <table
+                        bgcolor="lightgray"
+                        align="center"
+                        border="2"
+                        rules="all"
+                        cellpadding="5"
+                    >
+                        <tr>
+                            <td width="150" height="150">
+                                <marquee behavior="scroll" direction="left">
+                                    <a
+                                        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/marquee"
+                                        >marquees</a
+                                    >! wee!!! (clicking links like this is kinda
+                                    hard huh...)
+                                </marquee>
+                            </td>
+                            <td width="150" height="150">
+                                <center>
+                                    <a
+                                        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/center"
+                                        >center tags</a
+                                    >! need these for the table too, alignment
+                                    attribute is only vertical
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" height="150">
+                                <center>
+                                    <font face="Times New Roman" color="black"
+                                        ><a
+                                            href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/font"
+                                            >font tags</a
+                                        >! no css required!</font
+                                    >
+                                </center>
+                            </td>
+                            <td width="150" height="150">
+                                <center>
+                                    various depricated attributes! that's how
+                                    i'm styling most of these things hehe
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="150" height="150">
+                                <center>
+                                    <big
+                                        ><big
+                                            ><big
+                                                ><big
+                                                    >i am the
+                                                    <a
+                                                        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/big"
+                                                        >big</a
+                                                    >
+                                                    i am so large
+                                                </big></big
+                                            ></big
+                                        ></big
+                                    >
+                                </center>
+                            </td>
+                            <td width="150" height="150">
+                                <center>
+                                    <a
+                                        href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/xmp"
+                                    >
+                                        <xmp
+>xmp tag!
+<em>nothing</em>
+renders fancy
+in <b>here</b>.
+(even wrapping
+is turned off
+by default...)</xmp
+                                        >
+                                    </a>
+                                </center>
+                            </td>
+                        </tr>
+                    </table>
+                    <p></p>
                     <details>
                         <summary>huh, never seen this tag before</summary>
-                        very interesting <pre></pre> tag we have here! doesn't even need any
+                        very interesting tag we have here! doesn't even need any
                         javascript to funtion, very handy<br />could use some
-                        styling however...
+                        styling however... too bad it doesn't have any useful
+                        attributes :/
                     </details>
                     <plaintext>
 now, for my final (unintended) magic trick,
 this is the <plaintext></plaintext> element!
+they're similar to the <xmp></xmp> tags but
+they're also depricated, so they shouldn't be used.
+sincy this is depricated, it might work differently
+on other browsers, so i can't guarantee it does
+what i want it to but... that's the fun of
+using depricated things i suppose :3 i'm testing
+this on chrome so let me know how it does elsewhere!
 in here, <em>anything</em> i type will just be
 <b>plain text.</b> absolutely no formatting here!
 (the formatting from the font element outside still applies though)
 the line breaks in this paragraph are actual line breaks
-in the editor, not <br> tags (those don't work, remember?)
+in the editor, not <br> tags (those don't work :p)
 i also don't think the text in here will wrap,
 it just extends off the screen. weird stuff!
 weirdest of all though, i think you'll notice
@@ -91,10 +171,13 @@ its closing tag is treated as plaintext...
 so the plaintext never actually stops. pretty silly.
 that means the rest of this page is different
 depending who's looking at it, for me there's a bunch
-of javascript code that some of my extensions inject
+of javascript code that my live dev server injects
 into the page. i'd link an image here to show you but
 i just realized it... wouldn't work because of the plaintext tag.
-sigh... guess we really should just stick to the <pre>pre</pre> tag
+sigh... guess we really should just stick to the
+<pre></pre> and <code></code> tags, though with
+those we still need to manually escape typical
+xml syntax with &lt; and &gt; :/
                     </plaintext>
                 </main>
             </center>
