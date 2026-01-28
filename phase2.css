@@ -56,8 +56,8 @@ body {
   top: 0;
   left: 0;
   width: 100dvw;
-  height: 100dvh;
-  z-index: -2;
+  height: 100%;
+  z-index: -1;
   overflow: hidden;
 }
 
@@ -69,11 +69,11 @@ body {
 
 #blur {
   position: absolute;
-  z-index: -1;
+  z-index: 1;
   width: 100%;
   height: 100%;
 
-  backdrop-filter: blur(40px);
+  backdrop-filter: blur(20px);
 }
 
 #main-container {
