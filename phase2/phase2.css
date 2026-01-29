@@ -121,6 +121,7 @@ body {
 
 #floating-nodes > div {
   position: absolute;
+  will-change: transform;
 }
 
 #floating-nodes a {
