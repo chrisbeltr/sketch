@@ -1,19 +1,13 @@
+:root {
+  --background-blue: #ddfafe;
+  --background-pink: #feedff;
+}
+
 body {
   height: 100dvh;
   margin: 0;
 
-  background-color: bisque;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-main {
-  width: max-content;
-  padding: 10px;
-
-  background-color: blanchedalmond;
+  background-image: linear-gradient(160deg, var(--background-blue) 0%, var(--background-pink) 33%, var(--background-blue) 67%, var(--background-pink) 100%);
 }
 
 h1,
