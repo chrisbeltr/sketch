@@ -77,13 +77,61 @@ body {
 }
 
 .can-top-label {
-  background-color: yellow;
+  position: relative;
+  flex-basis: 0;
   flex-grow: 7;
+  flex-shrink: 0;
+
+  background-color: yellow;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.can-top-label-big {
+  font-size: 2rem;
+}
+
+.can-top-label-small {
+  position: absolute;
+  bottom: 5px;
+  font-size: 0.9rem;
 }
 
 .can-bottom-label {
-  background-color: red;
+  padding: 5px;
+  flex-basis: 0;
   flex-grow: 4;
+  font-size: 0.6rem;
+  
+  background-color: red;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.can-bottom-label * {
+  text-align: center;
+}
+
+.can-bottom-label-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.can-bottom-label-1, .can-bottom-label-3 {
+  color: white;
+}
+.can-bottom-label-2 {
+  color: yellow;
+}
+
+.left-can .can-top-label, .left-can .can-bottom-label {
+  transform: translateX(-49px);
 }
 
 .can-rim {
