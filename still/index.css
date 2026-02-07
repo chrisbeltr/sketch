@@ -104,7 +104,7 @@ body {
   flex-basis: 0;
   flex-grow: 4;
   font-size: 0.6rem;
-  
+
   background-color: red;
 
   display: flex;
@@ -123,14 +123,16 @@ body {
   gap: 5px;
 }
 
-.can-bottom-label-1, .can-bottom-label-3 {
+.can-bottom-label-1,
+.can-bottom-label-3 {
   color: white;
 }
 .can-bottom-label-2 {
   color: yellow;
 }
 
-.left-can .can-top-label, .left-can .can-bottom-label {
+.left-can .can-top-label,
+.left-can .can-bottom-label {
   transform: translateX(-49px);
 }
 
@@ -306,7 +308,12 @@ body {
   height: 100%;
 }
 
-.right-can-whole, .left-can-whole, .kettle-whole, .cup-top-whole, .cup-middle-whole, .cup-bottom-whole {
+.right-can-whole,
+.left-can-whole,
+.kettle-whole,
+.cup-top-whole,
+.cup-middle-whole,
+.cup-bottom-whole {
   position: absolute;
   z-index: 3; /* just so there's no problems with hovering */
   top: 0;
@@ -315,20 +322,33 @@ body {
   height: 100%;
 }
 
-.right-can-whole > .vanish, .left-can-whole > .vanish, .kettle-whole > .vanish, .cup-top-whole > .vanish, .cup-middle-whole > .vanish, .cup-bottom-whole > .vanish {
+.right-can-whole > .vanish,
+.left-can-whole > .vanish,
+.kettle-whole > .vanish,
+.cup-top-whole > .vanish,
+.cup-middle-whole > .vanish,
+.cup-bottom-whole > .vanish {
   visibility: visible;
 }
 
-.right-can-whole:hover > .vanish, .left-can-whole:hover > .vanish, .kettle-whole:hover > .vanish, .cup-top-whole:hover > .vanish, .cup-middle-whole:hover > .vanish, .cup-bottom-whole:hover > .vanish {
+.right-can-whole:hover > .vanish,
+.left-can-whole:hover > .vanish,
+.kettle-whole:hover > .vanish,
+.cup-top-whole:hover > .vanish,
+.cup-middle-whole:hover > .vanish,
+.cup-bottom-whole:hover > .vanish {
   visibility: hidden;
 }
 
-.right-can-whole > .vanish, .left-can-whole > .vanish {
+.right-can-whole > .vanish,
+.left-can-whole > .vanish {
   background-color: yellow;
 }
 .kettle-whole > .vanish {
   background-color: orangered;
 }
-.cup-top-whole > .vanish, .cup-middle-whole > .vanish, .cup-bottom-whole > .vanish {
+.cup-top-whole > .vanish,
+.cup-middle-whole > .vanish,
+.cup-bottom-whole > .vanish {
   background-color: blue;
 }
