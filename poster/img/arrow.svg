@@ -1,5 +1,12 @@
-<svg viewBox="0 0 106 82" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M65.0781 81.0233C65.0781 58.9191 82.9972 41 105.101 41" stroke="currentColor" stroke-width="2"></path>
-<path d="M65.0781 0.97666C65.0781 23.0809 82.9972 41 105.101 41" stroke="currentColor" stroke-width="2"></path>
-<path d="M99.8203 41L0.894692 41" stroke="currentColor" stroke-width="2"></path>
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="-53.145 14.37 159.145 52.615" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:guide x="-53.145" y="0.53" angle="0"/>
+    <bx:export>
+      <bx:file format="svg"/>
+    </bx:export>
+  </defs>
+  <path d="M 73.565 66.139 C 73.565 44.035 82.997 41 105.101 41" style="stroke: rgba(0, 0, 0, 0.9); stroke-width: 5px;"/>
+  <path d="M 73.826 15.6 C 73.826 37.704 82.997 41 105.101 41" style="stroke: rgba(0, 0, 0, 0.9); stroke-width: 5px;"/>
+  <path d="M 99.82 41 L -51.723 41" id="line" style="stroke: rgba(0, 0, 0, 0.9); stroke-width: 5px;"/>
 </svg>
