@@ -1,12 +1,13 @@
 declare class File {
     element: HTMLElement;
-    name: String;
-    constructor(fileTemplate: HTMLTemplateElement, name: String);
+    name: string;
+    nameElement: HTMLElement;
+    constructor(fileTemplate: HTMLTemplateElement, name: string);
 }
 declare class Text extends File {
     private content;
-    constructor(fileTemplate: HTMLTemplateElement, name: String, content: String);
-    changeContent(newContent: String): void;
+    constructor(fileTemplate: HTMLTemplateElement, name: string, content: string);
+    changeContent(newContent: string): void;
 }
 declare class Folder extends File {
 }
@@ -20,7 +21,7 @@ declare class System {
     private fileTemplate;
     element: HTMLElement;
     constructor(systemTemplate: HTMLTemplateElement, fileTemplate: HTMLTemplateElement);
-    addFile(name: String): File;
+    addFile(name: string): File;
     appendSystem(element: HTMLElement): void;
 }
 export { Text, Folder, Image, Drive, System };

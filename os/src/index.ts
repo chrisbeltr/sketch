@@ -8,5 +8,5 @@ const fileTemplate = document.getElementById(
 ) as HTMLTemplateElement;
 
 let sys = new os.System(sysTemplate, fileTemplate);
-sys.addFile("hellooo");
+sys.addFile("haiiiiiii iagsdyauygygwdgywgyd");
 sys.appendSystem(document.body as HTMLBodyElement);

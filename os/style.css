@@ -9,9 +9,10 @@
   height: 100dvh;
 
   /* sizing */
+  --file-width: 105px;
+  --file-height: 140px;
   --icon-width: 75px;
   --icon-height: 75px;
-  --text-max-width: 85px;
 
   /* colors */
   --test-light: #d6d6d6;
@@ -27,35 +28,67 @@ body {
 }
 
 .system {
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: 100%;
 }
 
 .file {
-  width: fit-content;
-  /* height: fit-content; */
+  width: var(--file-width);
+  height: var(--file-height);
+  padding: 10px;
   position: relative;
 
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
+
+  user-select: none;
+}
+.file:hover:not(.file-dragging) {
+  cursor: pointer;
 }
 
 .file-icon {
   width: var(--icon-width);
   height: var(--icon-height);
-
+  flex-shrink: 0;
+  
   background-color: var(--test-dark);
 }
 
 .file-name {
-  width: var(--text-max-width);
+  max-width: calc(var(--file-width) - 20px);
+  height: 34px;
   background-color: var(--test-light);
-
+  padding: 5px;
+  flex-grow: 0;
+  
   font-family: "Inter", sans-serif;
   font-size: 20px;
+  text-align: center;
+  text-wrap-mode: wrap;
+  word-wrap: break-word;
+
+  overflow: hidden;
+
+  user-select: none;
+  pointer-events: none;
+}
+.file.file-selected .file-name {
+  overflow: visible;
 }
 
 .file-select {
   position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.file:hover:not(.file-dragging) .file-select {
+  background-color: rgba(174, 213, 238, 0.44);
 }

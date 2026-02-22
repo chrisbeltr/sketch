@@ -1,12 +1,15 @@
 class File {
   element: HTMLElement;
-  name: String;
+  name: string;
+  nameElement: HTMLElement;
 
-  constructor(fileTemplate: HTMLTemplateElement, name: String) {
+  constructor(fileTemplate: HTMLTemplateElement, name: string) {
     this.element = document
       .importNode(fileTemplate, true)
       .content.querySelector(".file")!;
+    this.nameElement = this.element.querySelector(".file-name")!;
     this.name = name;
+    this.nameElement.textContent = name;
   }
 }
 
@@ -17,7 +20,7 @@ class Directory {
     this.files.push(file);
   }
 
-  getFile(name: String) {
+  getFile(name: string) {
     return this.files.find((v) => {
       v.name == name;
     });
@@ -25,18 +28,18 @@ class Directory {
 }
 
 class Text extends File {
-  private content: String;
+  private content: string;
 
   constructor(
     fileTemplate: HTMLTemplateElement,
-    name: String,
-    content: String,
+    name: string,
+    content: string,
   ) {
     super(fileTemplate, name);
     this.content = content;
   }
 
-  changeContent(newContent: String) {
+  changeContent(newContent: string) {
     this.content = newContent;
   }
 }
@@ -62,7 +65,7 @@ class System {
       .content.querySelector(".system")!;
   }
 
-  addFile(name: String) {
+  addFile(name: string) {
     let file = new File(this.fileTemplate, name);
     this.directory.addFile(file);
     this.element.appendChild(file.element);

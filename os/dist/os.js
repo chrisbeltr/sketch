@@ -3,7 +3,9 @@ class File {
         this.element = document
             .importNode(fileTemplate, true)
             .content.querySelector(".file");
+        this.nameElement = this.element.querySelector(".file-name");
         this.name = name;
+        this.nameElement.textContent = name;
     }
 }
 class Directory {
