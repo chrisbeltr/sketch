@@ -1,0 +1,61 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+:root {
+  width: 100dvw;
+  height: 100dvh;
+
+  /* sizing */
+  --icon-width: 75px;
+  --icon-height: 75px;
+  --text-max-width: 85px;
+
+  /* colors */
+  --test-light: #d6d6d6;
+  --test-dark: #a6a6a6;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+
+  background-color: white;
+}
+
+.system {
+  width: 100%;
+  height: 100%;
+}
+
+.file {
+  width: fit-content;
+  /* height: fit-content; */
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-icon {
+  width: var(--icon-width);
+  height: var(--icon-height);
+
+  background-color: var(--test-dark);
+}
+
+.file-name {
+  width: var(--text-max-width);
+  background-color: var(--test-light);
+
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+}
+
+.file-select {
+  position: absolute;
+}
