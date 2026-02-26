@@ -6,13 +6,12 @@ declare class BaseFile {
     element: HTMLElement;
     name: string;
     nameElement: HTMLElement;
+    iconElement: HTMLElement;
     private offsetX;
     private offsetY;
     private beingDragged;
     constructor(fileTemplate: HTMLTemplateElement, name: string, mode: PositionMode, x?: number, y?: number);
     moveFile(x: number, y: number): void;
-    onFocus(ev: FocusEvent): void;
-    onBlur(ev: FocusEvent): void;
     onDragStart(ev: DragEvent): void;
     onDragEnd(ev: DragEvent): void;
     onDragEnter(ev: DragEvent): void;

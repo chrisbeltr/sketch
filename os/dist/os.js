@@ -1,15 +1,26 @@
-var ZIndexes;
-(function (ZIndexes) {
-    ZIndexes[ZIndexes["SYSTEM"] = 0] = "SYSTEM";
-    ZIndexes[ZIndexes["BLUR"] = 1] = "BLUR";
-    ZIndexes[ZIndexes["FOCUS"] = 2] = "FOCUS";
-    ZIndexes[ZIndexes["UI"] = 3] = "UI";
-})(ZIndexes || (ZIndexes = {}));
+// util functions
+// clamp between `min` and `max`
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
 var PositionMode;
 (function (PositionMode) {
     PositionMode[PositionMode["INLINE"] = 0] = "INLINE";
     PositionMode[PositionMode["ABSOLUTE"] = 1] = "ABSOLUTE";
 })(PositionMode || (PositionMode = {}));
+var Z;
+(function (Z) {
+    Z[Z["SYSTEM"] = 0] = "SYSTEM";
+    Z[Z["FILES"] = 1] = "FILES";
+    Z[Z["UI"] = 2] = "UI";
+})(Z || (Z = {}));
+var Colors;
+(function (Colors) {
+    Colors[Colors["TEXT"] = 0] = "TEXT";
+    Colors[Colors["FOLDER"] = 1] = "FOLDER";
+    Colors[Colors["IMAGE"] = 2] = "IMAGE";
+    Colors[Colors["DRIVE"] = 3] = "DRIVE";
+})(Colors || (Colors = {}));
 class BaseFile {
     constructor(fileTemplate, name, mode, x, y) {
         // initial
@@ -19,18 +30,18 @@ class BaseFile {
         this.element = document
             .importNode(fileTemplate, true)
             .content.querySelector(".file");
-        this.element.style.zIndex = `${ZIndexes.BLUR}`;
+        this.element.style.zIndex = `${Z.FILES}`;
         this.nameElement = this.element.querySelector(".file-name");
+        this.iconElement = this.element.querySelector(".file-icon");
         this.name = name;
         this.nameElement.textContent = name;
-        if (mode == PositionMode.ABSOLUTE) {
+        if (mode == PositionMode.ABSOLUTE && x && y) {
             this.element.style.position = "absolute";
-            this.element.style.top = `${y}px`;
-            this.element.style.left = `${x}px`;
+            this.moveFile(x, y);
         }
         // adding handlers
-        this.element.addEventListener("focus", this.onFocus.bind(this));
-        this.element.addEventListener("blur", this.onBlur.bind(this));
+        // this.element.addEventListener("focus", this.onFocus.bind(this));
+        // this.element.addEventListener("blur", this.onBlur.bind(this));
         this.element.addEventListener("dragstart", this.onDragStart.bind(this));
         this.element.addEventListener("dragend", this.onDragEnd.bind(this));
         this.element.addEventListener("dragover", this.onDragOver);
@@ -40,30 +51,38 @@ class BaseFile {
     }
     moveFile(x, y) {
         // console.log(`x: ${x + this.offsetX} ,y: ${y + this.offsetY}`);
-        this.element.style.top = `${y + this.offsetY}px`;
-        this.element.style.left = `${x + this.offsetX}px`;
+        // let top = y + this.offsetY;
+        // let left = x + this.offsetX;
+        let top = clamp(y + this.offsetY, 0, window.innerHeight -
+            Number(window
+                .getComputedStyle(document.documentElement)
+                .getPropertyValue("--file-height")
+                .slice(0, -2)));
+        let left = clamp(x + this.offsetX, 0, window.innerWidth -
+            Number(window
+                .getComputedStyle(document.documentElement)
+                .getPropertyValue("--file-width")
+                .slice(0, -2)));
+        this.element.style.top = `${top}px`;
+        this.element.style.left = `${left}px`;
     }
-    onFocus(ev) {
-        this.element.style.zIndex = `${ZIndexes.FOCUS}`;
-    }
-    onBlur(ev) {
-        this.element.style.zIndex = `${ZIndexes.BLUR}`;
-    }
+    // onFocus(ev: FocusEvent) {
+    //   this.element.style.zIndex = "1";
+    // }
+    // onBlur(ev: FocusEvent) {
+    //   this.element.style.zIndex = "1";
+    // }
     onDragStart(ev) {
         this.element.blur();
-        let currTop = this.element.style.top;
-        let currLeft = this.element.style.left;
-        this.offsetX =
-            Number(currLeft.substring(0, currLeft.length - 2)) - ev.clientX;
-        this.offsetY =
-            Number(currTop.substring(0, currTop.length - 2)) - ev.clientY;
+        this.offsetX = Number(this.element.style.left.slice(0, -2)) - ev.clientX;
+        this.offsetY = Number(this.element.style.top.slice(0, -2)) - ev.clientY;
         ev.dataTransfer.items.add(`{"name": "${this.name}"}`, "text/plain");
-        // console.log(`x: ${this.offsetX}, y: ${this.offsetY}`);
         this.beingDragged = true;
     }
     onDragEnd(ev) {
         this.element.classList.remove("file-no-hover");
         this.beingDragged = false;
+        this.element.focus();
     }
     onDragEnter(ev) {
         this.element.classList.add("file-hover");
@@ -89,6 +108,8 @@ class BaseFile {
         this.element.classList.remove("file-no-hover");
         this.element.classList.remove("file-hover");
         if (!ev.dataTransfer)
+            return;
+        if (this.beingDragged)
             return;
         for (let i = 0; i < ev.dataTransfer.items.length; i++) {
             let item = ev.dataTransfer.items[i];
@@ -153,14 +174,14 @@ class System {
         this.element = document
             .importNode(systemTemplate, true)
             .content.querySelector(".system");
-        this.element.style.zIndex = `${ZIndexes.SYSTEM}`;
+        this.element.style.zIndex = `${Z.SYSTEM}`;
         // event listeners for system
         this.element.addEventListener("dragover", this.onDragOver);
         this.element.addEventListener("drop", this.onDrop.bind(this));
         this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
     }
     addFile(name) {
-        let file = new BaseFile(this.fileTemplate, name, PositionMode.ABSOLUTE, 0, 0);
+        let file = new BaseFile(this.fileTemplate, name, PositionMode.ABSOLUTE, Math.random() * window.innerWidth, Math.random() * window.innerHeight);
         this.directory.addFile(file);
         this.element.appendChild(file.element);
         return file;
@@ -176,6 +197,8 @@ class System {
         if (!file)
             return;
         file.moveFile(x, y);
+        this.element.removeChild(file.element);
+        this.element.appendChild(file.element);
     }
     appendSystem(element) {
         element.appendChild(this.element);
