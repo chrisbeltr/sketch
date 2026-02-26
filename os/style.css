@@ -9,7 +9,7 @@
   height: 100dvh;
 
   /* sizing */
-  --file-width: 105px;
+  --file-width: 140px;
   --file-height: 140px;
   --icon-width: 75px;
   --icon-height: 75px;
@@ -17,6 +17,8 @@
   /* colors */
   --test-light: #d6d6d6;
   --test-dark: #a6a6a6;
+  --select-background: rgba(164, 208, 236, 0.44);
+  --select-border: #2F64E9;
 }
 
 body {
@@ -32,6 +34,7 @@ body {
   z-index: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .file {
@@ -48,8 +51,12 @@ body {
 
   user-select: none;
 }
-.file:hover:not(.file-dragging) {
+.file:hover {
   cursor: pointer;
+}
+.file * {
+  pointer-events: none;
+  user-select: none;
 }
 
 .file-icon {
@@ -62,13 +69,13 @@ body {
 
 .file-name {
   max-width: calc(var(--file-width) - 20px);
-  height: 34px;
+  height: 30px;
   background-color: var(--test-light);
   padding: 5px;
   flex-grow: 0;
   
   font-family: "Inter", sans-serif;
-  font-size: 20px;
+  font-size: 1rem;
   text-align: center;
   text-wrap-mode: wrap;
   word-wrap: break-word;
@@ -78,7 +85,7 @@ body {
   user-select: none;
   pointer-events: none;
 }
-.file.file-selected .file-name {
+.file:focus .file-name {
   overflow: visible;
 }
 
@@ -88,7 +95,11 @@ body {
   width: 100%;
   height: 100%;
 }
-
-.file:hover:not(.file-dragging) .file-select {
-  background-color: rgba(174, 213, 238, 0.44);
+.file:hover:not(.file-no-hover) .file-select,
+.file-hover:not(.file-no-hover) .file-select {
+  background-color: var(--select-background);
+}
+.file:focus .file-select {
+  background-color: var(--select-background);
+  border: solid 5px var(--select-border);
 }
