@@ -1,5 +1,3 @@
-// util functions
-
 // clamp between `min` and `max`
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
@@ -165,6 +163,13 @@ class BaseFile {
 
 class Directory {
   files: Array<BaseFile> = [];
+  element: HTMLElement;
+
+  constructor(directoryTemplate: HTMLTemplateElement) {
+    this.element = document
+      .importNode(directoryTemplate, true)
+      .content.querySelector(".directory")!;
+  }
 
   addFile(file: BaseFile) {
     let fname = file.name;
@@ -175,6 +180,7 @@ class Directory {
     }
     file.name = fname;
     file.nameElement.textContent = fname;
+    this.element.appendChild(file.element);
     this.files.push(file);
   }
 
@@ -184,9 +190,18 @@ class Directory {
     });
   }
 
+  moveFile(name: string, x: number, y: number) {
+    let file = this.getFile(name);
+    if (!file) return;
+    file.moveFile(x, y);
+    this.element.removeChild(file.element);
+    this.element.appendChild(file.element);
+  }
+
   removeFile(name: string) {
     let file = this.getFile(name);
     if (!file) return;
+    this.element.removeChild(file.element);
     return this.files.splice(this.files.indexOf(file))[0];
   }
 }
@@ -214,10 +229,27 @@ class Folder extends BaseFile {}
 class Image extends BaseFile {}
 class Drive extends BaseFile {}
 
+class Window {
+  element: HTMLElement;
+  directory: Directory;
+
+  constructor(
+    windowTemplate: HTMLTemplateElement,
+    directoryTemplate: HTMLTemplateElement,
+  ) {
+    this.element = document
+      .importNode(windowTemplate, true)
+      .content.querySelector(".window")!;
+    this.directory = new Directory(directoryTemplate);
+  }
+}
+
 class System {
   private directory: Directory;
   private systemTemplate: HTMLTemplateElement;
   private fileTemplate: HTMLTemplateElement;
+  private directoryTemplate: HTMLTemplateElement;
+  private windowTemplate: HTMLTemplateElement;
   element: HTMLElement;
 
   mouseX: number;
@@ -226,21 +258,30 @@ class System {
   constructor(
     systemTemplate: HTMLTemplateElement,
     fileTemplate: HTMLTemplateElement,
+    directoryTemplate: HTMLTemplateElement,
+    windowTemplate: HTMLTemplateElement,
   ) {
     this.mouseX = 0;
     this.mouseY = 0;
     this.systemTemplate = systemTemplate;
     this.fileTemplate = fileTemplate;
-    this.directory = new Directory();
+    this.directoryTemplate = directoryTemplate;
+    this.windowTemplate = windowTemplate;
+    this.directory = new Directory(directoryTemplate);
     this.element = document
       .importNode(systemTemplate, true)
       .content.querySelector(".system")!;
     this.element.style.zIndex = `${Z.SYSTEM}`;
+    this.element.prepend(this.directory.element);
 
     // event listeners for system
     this.element.addEventListener("dragover", this.onDragOver);
     this.element.addEventListener("drop", this.onDrop.bind(this));
     this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
+  }
+
+  newWindow(directoryTemplate: HTMLTemplateElement) {
+    return new Window(this.windowTemplate, directoryTemplate);
   }
 
   addFile(name: string) {
@@ -252,23 +293,25 @@ class System {
       Math.random() * window.innerHeight,
     );
     this.directory.addFile(file);
-    this.element.appendChild(file.element);
+    // this.element.appendChild(file.element);
 
     return file;
   }
 
   removeFile(name: string) {
     let file = this.directory.removeFile(name);
-    if (!file) return;
-    this.element.removeChild(file.element);
+    // if (!file) return;
+    // this.element.removeChild(file.element);
   }
 
   moveFile(name: string, x: number, y: number) {
-    let file = this.directory.getFile(name);
-    if (!file) return;
-    file.moveFile(x, y);
-    this.element.removeChild(file.element);
-    this.element.appendChild(file.element);
+    this.directory.moveFile(name, x, y);
+    // let file = this.directory.getFile(name);
+    // if (!file) return;
+    // file.moveFile(x, y);
+    // this.directory.reorderFile(file);
+    // this.element.removeChild(file.element);
+    // this.element.appendChild(file.element);
   }
 
   appendSystem(element: HTMLElement) {

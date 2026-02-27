@@ -1,4 +1,3 @@
-// util functions
 // clamp between `min` and `max`
 function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -123,8 +122,11 @@ class BaseFile {
     }
 }
 class Directory {
-    constructor() {
+    constructor(directoryTemplate) {
         this.files = [];
+        this.element = document
+            .importNode(directoryTemplate, true)
+            .content.querySelector(".directory");
     }
     addFile(file) {
         let fname = file.name;
@@ -135,6 +137,7 @@ class Directory {
         }
         file.name = fname;
         file.nameElement.textContent = fname;
+        this.element.appendChild(file.element);
         this.files.push(file);
     }
     getFile(name) {
@@ -142,10 +145,19 @@ class Directory {
             return v.name == name;
         });
     }
+    moveFile(name, x, y) {
+        let file = this.getFile(name);
+        if (!file)
+            return;
+        file.moveFile(x, y);
+        this.element.removeChild(file.element);
+        this.element.appendChild(file.element);
+    }
     removeFile(name) {
         let file = this.getFile(name);
         if (!file)
             return;
+        this.element.removeChild(file.element);
         return this.files.splice(this.files.indexOf(file))[0];
     }
 }
@@ -164,41 +176,55 @@ class Image extends BaseFile {
 }
 class Drive extends BaseFile {
 }
+class Window {
+    constructor(windowTemplate, directoryTemplate) {
+        this.element = document
+            .importNode(windowTemplate, true)
+            .content.querySelector(".window");
+        this.directory = new Directory(directoryTemplate);
+    }
+}
 class System {
-    constructor(systemTemplate, fileTemplate) {
+    constructor(systemTemplate, fileTemplate, directoryTemplate, windowTemplate) {
         this.mouseX = 0;
         this.mouseY = 0;
         this.systemTemplate = systemTemplate;
         this.fileTemplate = fileTemplate;
-        this.directory = new Directory();
+        this.directoryTemplate = directoryTemplate;
+        this.windowTemplate = windowTemplate;
+        this.directory = new Directory(directoryTemplate);
         this.element = document
             .importNode(systemTemplate, true)
             .content.querySelector(".system");
         this.element.style.zIndex = `${Z.SYSTEM}`;
+        this.element.prepend(this.directory.element);
         // event listeners for system
         this.element.addEventListener("dragover", this.onDragOver);
         this.element.addEventListener("drop", this.onDrop.bind(this));
         this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
     }
+    newWindow(directoryTemplate) {
+        return new Window(this.windowTemplate, directoryTemplate);
+    }
     addFile(name) {
         let file = new BaseFile(this.fileTemplate, name, PositionMode.ABSOLUTE, Math.random() * window.innerWidth, Math.random() * window.innerHeight);
         this.directory.addFile(file);
-        this.element.appendChild(file.element);
+        // this.element.appendChild(file.element);
         return file;
     }
     removeFile(name) {
         let file = this.directory.removeFile(name);
-        if (!file)
-            return;
-        this.element.removeChild(file.element);
+        // if (!file) return;
+        // this.element.removeChild(file.element);
     }
     moveFile(name, x, y) {
-        let file = this.directory.getFile(name);
-        if (!file)
-            return;
-        file.moveFile(x, y);
-        this.element.removeChild(file.element);
-        this.element.appendChild(file.element);
+        this.directory.moveFile(name, x, y);
+        // let file = this.directory.getFile(name);
+        // if (!file) return;
+        // file.moveFile(x, y);
+        // this.directory.reorderFile(file);
+        // this.element.removeChild(file.element);
+        // this.element.appendChild(file.element);
     }
     appendSystem(element) {
         element.appendChild(this.element);

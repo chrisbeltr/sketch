@@ -19,6 +19,15 @@ declare class BaseFile {
     onDragOver(ev: DragEvent): void;
     onDrop(ev: DragEvent): void;
 }
+declare class Directory {
+    files: Array<BaseFile>;
+    element: HTMLElement;
+    constructor(directoryTemplate: HTMLTemplateElement);
+    addFile(file: BaseFile): void;
+    getFile(name: string): BaseFile | undefined;
+    moveFile(name: string, x: number, y: number): void;
+    removeFile(name: string): BaseFile | undefined;
+}
 declare class Text extends BaseFile {
     private content;
     constructor(fileTemplate: HTMLTemplateElement, name: string, content: string, mode: PositionMode, x: number, y: number);
@@ -30,14 +39,22 @@ declare class Image extends BaseFile {
 }
 declare class Drive extends BaseFile {
 }
+declare class Window {
+    element: HTMLElement;
+    directory: Directory;
+    constructor(windowTemplate: HTMLTemplateElement, directoryTemplate: HTMLTemplateElement);
+}
 declare class System {
     private directory;
     private systemTemplate;
     private fileTemplate;
+    private directoryTemplate;
+    private windowTemplate;
     element: HTMLElement;
     mouseX: number;
     mouseY: number;
-    constructor(systemTemplate: HTMLTemplateElement, fileTemplate: HTMLTemplateElement);
+    constructor(systemTemplate: HTMLTemplateElement, fileTemplate: HTMLTemplateElement, directoryTemplate: HTMLTemplateElement, windowTemplate: HTMLTemplateElement);
+    newWindow(directoryTemplate: HTMLTemplateElement): Window;
     addFile(name: string): BaseFile;
     removeFile(name: string): void;
     moveFile(name: string, x: number, y: number): void;
