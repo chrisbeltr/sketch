@@ -37,11 +37,18 @@ body {
   overflow: hidden;
 }
 
+.directory, .window-manager {
+  position: absolute;
+  top: 0;
+  left: 0;  
+}
+
 .file {
+  position: absolute;
+  z-index: 0;
   width: var(--file-width);
   height: var(--file-height);
   padding: 10px;
-  position: relative;
 
   display: flex;
   flex-direction: column;
@@ -102,4 +109,41 @@ body {
 .file:focus .file-select {
   background-color: var(--select-background);
   border: solid 5px var(--select-border);
+}
+
+.window {
+  position: absolute;
+  z-index: 0;
+  width: 800px;
+  height: 500px;
+  background-color: var(--test-dark);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.window-header {
+  padding: 10px;
+  height: 44px;
+  background-color: var(--test-light);
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.window-header-name {
+  font-family: "Inter", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--test-dark);
+}
+
+.window-header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.window-header-button {
+  height: 24px;
+  width: 24px;
 }

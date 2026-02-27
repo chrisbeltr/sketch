@@ -23,7 +23,18 @@
       </div>
     </template>
     <template id="directory-template"><div class="directory"></div></template>
-    <template id="system-template"><div class="system"><div class="windows-manager"></div></div></template>
+    <template id="system-template"><div class="system"><div class="window-manager"></div></div></template>
     <template id="window-template"><div class="window"></div></template>
+    <div class="window" style="z-index: 5; position: absolute;">
+      <div class="window-header">
+        <div class="window-header-name">test name</div>
+        <div class="window-header-buttons">
+          <img src="./images/min.svg" alt="minimize" class="window-header-button">
+          <img src="./images/max.svg" alt="maximize" class="window-header-button">
+          <img src="./images/close.svg" alt="close" class="window-header-button">
+        </div>
+      </div>
+      <div class="window-body"></div>
+    </div>
   </body>
 </html>

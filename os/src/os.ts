@@ -50,7 +50,6 @@ class BaseFile {
     this.element = document
       .importNode(fileTemplate, true)
       .content.querySelector(".file")!;
-    this.element.style.zIndex = `${Z.FILES}`;
     this.nameElement = this.element.querySelector(".file-name")!;
     this.iconElement = this.element.querySelector(".file-icon")!;
     this.name = name;
@@ -169,6 +168,8 @@ class Directory {
     this.element = document
       .importNode(directoryTemplate, true)
       .content.querySelector(".directory")!;
+    this.element.style.zIndex = `${Z.FILES}`;
+    this.element.addEventListener("focusin", this.onFocusIn.bind(this));
   }
 
   addFile(file: BaseFile) {
@@ -190,12 +191,24 @@ class Directory {
     });
   }
 
+  reorderFile(name: string) {
+    let file = this.getFile(name);
+    if (!file) return;
+    this.element.removeChild(file.element);
+    this.element.appendChild(file.element);
+    file.element.focus();
+  }
+
+  private reorderFileObj(file: BaseFile) {
+    this.element.removeChild(file.element);
+    this.element.appendChild(file.element);
+  }
+
   moveFile(name: string, x: number, y: number) {
     let file = this.getFile(name);
     if (!file) return;
     file.moveFile(x, y);
-    this.element.removeChild(file.element);
-    this.element.appendChild(file.element);
+    this.reorderFileObj(file);
   }
 
   removeFile(name: string) {
@@ -203,6 +216,12 @@ class Directory {
     if (!file) return;
     this.element.removeChild(file.element);
     return this.files.splice(this.files.indexOf(file))[0];
+  }
+
+  onFocusIn(ev: FocusEvent) {
+    this.reorderFile(
+      (ev.target as HTMLElement).querySelector(".file-name")!.textContent,
+    );
   }
 }
 
@@ -236,6 +255,9 @@ class Window {
   constructor(
     windowTemplate: HTMLTemplateElement,
     directoryTemplate: HTMLTemplateElement,
+    name: string,
+    x: number,
+    y: number,
   ) {
     this.element = document
       .importNode(windowTemplate, true)
@@ -244,8 +266,39 @@ class Window {
   }
 }
 
+class WindowManager {
+  windows: Array<Window> = [];
+  element: HTMLElement;
+  windowTemplate: HTMLTemplateElement;
+  directoryTemplate: HTMLTemplateElement;
+
+  constructor(
+    element: HTMLElement,
+    windowTemplate: HTMLTemplateElement,
+    directoryTemplate: HTMLTemplateElement,
+  ) {
+    this.element = element;
+    this.element.style.zIndex = `${Z.UI}`;
+    this.windowTemplate = windowTemplate;
+    this.directoryTemplate = directoryTemplate;
+  }
+
+  addWindow(name: string, x: number, y: number) {
+    let window = new Window(
+      this.windowTemplate,
+      this.directoryTemplate,
+      name,
+      x,
+      y,
+    );
+    this.windows.push(window);
+    this.element.appendChild(window.element);
+  }
+}
+
 class System {
   private directory: Directory;
+  private windowManager: WindowManager;
   private systemTemplate: HTMLTemplateElement;
   private fileTemplate: HTMLTemplateElement;
   private directoryTemplate: HTMLTemplateElement;
@@ -271,6 +324,11 @@ class System {
     this.element = document
       .importNode(systemTemplate, true)
       .content.querySelector(".system")!;
+    this.windowManager = new WindowManager(
+      this.element.querySelector(".window-manager")!,
+      windowTemplate,
+      directoryTemplate,
+    );
     this.element.style.zIndex = `${Z.SYSTEM}`;
     this.element.prepend(this.directory.element);
 
@@ -280,8 +338,8 @@ class System {
     this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
   }
 
-  newWindow(directoryTemplate: HTMLTemplateElement) {
-    return new Window(this.windowTemplate, directoryTemplate);
+  addWindow(name: string, x: number, y: number) {
+    this.windowManager.addWindow(name, x, y);
   }
 
   addFile(name: string) {

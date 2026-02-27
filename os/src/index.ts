@@ -23,4 +23,5 @@ sys.addFile("this is");
 sys.addFile("not a");
 sys.addFile("test");
 sys.addFile("test");
+sys.addWindow("testy", 0, 0);
 sys.appendSystem(document.body);
