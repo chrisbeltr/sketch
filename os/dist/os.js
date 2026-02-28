@@ -13,19 +13,20 @@ var Z;
     Z[Z["FILES"] = 1] = "FILES";
     Z[Z["UI"] = 2] = "UI";
 })(Z || (Z = {}));
-var Colors;
-(function (Colors) {
-    Colors[Colors["TEXT"] = 0] = "TEXT";
-    Colors[Colors["FOLDER"] = 1] = "FOLDER";
-    Colors[Colors["IMAGE"] = 2] = "IMAGE";
-    Colors[Colors["DRIVE"] = 3] = "DRIVE";
-})(Colors || (Colors = {}));
+var FileTypes;
+(function (FileTypes) {
+    FileTypes[FileTypes["TEXT"] = 0] = "TEXT";
+    FileTypes[FileTypes["FOLDER"] = 1] = "FOLDER";
+    FileTypes[FileTypes["IMAGE"] = 2] = "IMAGE";
+    FileTypes[FileTypes["DRIVE"] = 3] = "DRIVE";
+})(FileTypes || (FileTypes = {}));
 class BaseFile {
-    constructor(fileTemplate, name, mode, x, y) {
+    constructor(system, fileTemplate, name, mode, x, y) {
         // initial
         this.offsetX = 0;
         this.offsetY = 0;
         this.beingDragged = false;
+        this.system = system;
         this.element = document
             .importNode(fileTemplate, true)
             .content.querySelector(".file");
@@ -40,12 +41,12 @@ class BaseFile {
         // adding handlers
         // this.element.addEventListener("focus", this.onFocus.bind(this));
         // this.element.addEventListener("blur", this.onBlur.bind(this));
-        this.element.addEventListener("dragstart", this.onDragStart.bind(this));
+        // this.element.addEventListener("dragstart", this.onDragStart.bind(this));
         this.element.addEventListener("dragend", this.onDragEnd.bind(this));
         this.element.addEventListener("dragover", this.onDragOver);
         this.element.addEventListener("dragenter", this.onDragEnter.bind(this));
         this.element.addEventListener("dragleave", this.onDragLeave.bind(this));
-        this.element.addEventListener("drop", this.onDrop.bind(this));
+        // this.element.addEventListener("drop", this.onDrop.bind(this));
     }
     moveFile(x, y) {
         // console.log(`x: ${x + this.offsetX} ,y: ${y + this.offsetY}`);
@@ -70,13 +71,14 @@ class BaseFile {
     // onBlur(ev: FocusEvent) {
     //   this.element.style.zIndex = "1";
     // }
-    onDragStart(ev) {
-        this.element.blur();
-        this.offsetX = Number(this.element.style.left.slice(0, -2)) - ev.clientX;
-        this.offsetY = Number(this.element.style.top.slice(0, -2)) - ev.clientY;
-        ev.dataTransfer.items.add(`{"name": "${this.name}"}`, "text/plain");
-        this.beingDragged = true;
-    }
+    // onDragStart(ev: DragEvent) {
+    //   this.element.blur();
+    //   this.offsetX = Number(this.element.style.left.slice(0, -2)) - ev.clientX;
+    //   this.offsetY = Number(this.element.style.top.slice(0, -2)) - ev.clientY;
+    //   let fileData: FileJSONData = { name: this.name, type: null };
+    //   ev.dataTransfer!.items.add(JSON.stringify(fileData), "text/plain");
+    //   this.beingDragged = true;
+    // }
     onDragEnd(ev) {
         this.element.classList.remove("file-no-hover");
         this.beingDragged = false;
@@ -100,24 +102,6 @@ class BaseFile {
         ev.dataTransfer.dropEffect = "copy";
         ev.preventDefault();
         ev.stopPropagation();
-    }
-    onDrop(ev) {
-        ev.stopPropagation();
-        this.element.classList.remove("file-no-hover");
-        this.element.classList.remove("file-hover");
-        if (!ev.dataTransfer)
-            return;
-        if (this.beingDragged)
-            return;
-        for (let i = 0; i < ev.dataTransfer.items.length; i++) {
-            let item = ev.dataTransfer.items[i];
-            if (item.kind === "string") {
-                item.getAsString((data) => {
-                    console.log(`${this.name} received ${data}`);
-                });
-            }
-        }
-        this.element.focus();
     }
 }
 class Directory {
@@ -150,6 +134,9 @@ class Directory {
         let file = this.getFile(name);
         if (!file)
             return;
+        if (Array.from(this.element.children).slice(-1)[0] == file.element) {
+            return;
+        }
         this.element.removeChild(file.element);
         this.element.appendChild(file.element);
         file.element.focus();
@@ -172,17 +159,56 @@ class Directory {
         this.element.removeChild(file.element);
         return this.files.splice(this.files.indexOf(file))[0];
     }
+    clear() {
+        this.element.innerText = "";
+    }
     onFocusIn(ev) {
         this.reorderFile(ev.target.querySelector(".file-name").textContent);
     }
 }
 class Text extends BaseFile {
-    constructor(fileTemplate, name, content, mode, x, y) {
-        super(fileTemplate, name, mode, x, y);
+    constructor(system, fileTemplate, name, content, mode, x, y) {
+        super(system, fileTemplate, name, mode, x, y);
         this.content = content;
+        this.element.addEventListener("dragstart", this.onDragStart.bind(this));
+        this.element.addEventListener("drop", this.onDrop.bind(this));
     }
     changeContent(newContent) {
         this.content = newContent;
+    }
+    onDragStart(ev) {
+        this.element.blur();
+        this.offsetX = Number(this.element.style.left.slice(0, -2)) - ev.clientX;
+        this.offsetY = Number(this.element.style.top.slice(0, -2)) - ev.clientY;
+        let fileData = { name: this.name, type: FileTypes.TEXT };
+        ev.dataTransfer.items.add(JSON.stringify(fileData), "text/plain");
+        this.beingDragged = true;
+    }
+    onDrop(ev) {
+        ev.stopPropagation();
+        this.element.classList.remove("file-no-hover");
+        this.element.classList.remove("file-hover");
+        if (!ev.dataTransfer)
+            return;
+        if (this.beingDragged)
+            return;
+        for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+            let item = ev.dataTransfer.items[i];
+            if (item.kind === "string") {
+                item.getAsString((data) => {
+                    // let newData: FileJSONData = JSON.parse(data);
+                    // newData.from = this.name;
+                    // let dataString = JSON.stringify(newData);
+                    // ev.dataTransfer!.items.clear();
+                    // ev.dataTransfer!.items.add(dataString, "text/plain");
+                    console.log(`${this.name} received ${data}`);
+                    let fileData = JSON.parse(data);
+                    let file = this.system.directory.getFile(fileData.name);
+                    this.system.addWindow(file.name, (Math.random() * window.innerWidth) / 2, (Math.random() * window.innerHeight) / 2);
+                });
+            }
+        }
+        this.element.focus();
     }
 }
 class Folder extends BaseFile {
@@ -192,11 +218,65 @@ class Image extends BaseFile {
 class Drive extends BaseFile {
 }
 class Window {
-    constructor(windowTemplate, directoryTemplate, name, x, y) {
+    constructor(manager, windowTemplate, directoryTemplate, name, x, y) {
+        this.offsetX = 0;
+        this.offsetY = 0;
+        this.dragging = false;
+        this.manager = manager;
         this.element = document
             .importNode(windowTemplate, true)
             .content.querySelector(".window");
+        this.nameElement = this.element.querySelector(".window-header-name");
+        this.nameElement.textContent = name;
+        this.closeElement = this.element.querySelector(".close");
+        this.headerElement = this.element.querySelector(".window-header");
+        this.name = name;
         this.directory = new Directory(directoryTemplate);
+        this.moveWindow(x, y);
+        this.closeElement.addEventListener("mousedown", this.onClose.bind(this));
+        this.headerElement.addEventListener("mousedown", this.onDragStart.bind(this));
+        this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
+        this.headerElement.addEventListener("mouseup", this.onDragEnd.bind(this));
+        this.element.addEventListener("mousedown", this.onClick.bind(this));
+    }
+    moveWindow(x, y) {
+        let top = clamp(y + this.offsetY, 0, window.innerHeight -
+            Number(window
+                .getComputedStyle(document.documentElement)
+                .getPropertyValue("--window-height")
+                .slice(0, -2)));
+        let left = clamp(x + this.offsetX, 0, window.innerWidth -
+            Number(window
+                .getComputedStyle(document.documentElement)
+                .getPropertyValue("--window-width")
+                .slice(0, -2)));
+        this.element.style.top = `${top}px`;
+        this.element.style.left = `${left}px`;
+    }
+    onClose(ev) {
+        console.log("close");
+        ev.stopPropagation();
+        this.manager.removeWindow(this.name);
+    }
+    onDragStart(ev) {
+        console.log("mousedown");
+        this.element.click();
+        this.offsetX = Number(this.element.style.left.slice(0, -2)) - ev.clientX;
+        this.offsetY = Number(this.element.style.top.slice(0, -2)) - ev.clientY;
+        this.dragging = true;
+    }
+    onMouseMove(ev) {
+        if (this.dragging) {
+            this.moveWindow(ev.clientX, ev.clientY);
+        }
+    }
+    onDragEnd(ev) {
+        this.dragging = false;
+    }
+    onClick(ev) {
+        console.log("click");
+        this.manager.removeWindowObject(this);
+        this.manager.addWindowObject(this);
     }
 }
 class WindowManager {
@@ -208,9 +288,30 @@ class WindowManager {
         this.directoryTemplate = directoryTemplate;
     }
     addWindow(name, x, y) {
-        let window = new Window(this.windowTemplate, this.directoryTemplate, name, x, y);
+        let window = new Window(this, this.windowTemplate, this.directoryTemplate, name, x, y);
+        this.addWindowObject(window);
+    }
+    addWindowObject(window) {
         this.windows.push(window);
         this.element.appendChild(window.element);
+    }
+    getWindow(name) {
+        return this.windows.find((v) => {
+            return v.name == name;
+        });
+    }
+    removeWindow(name) {
+        let window = this.getWindow(name);
+        if (!window)
+            return;
+        this.removeWindowObject(window);
+    }
+    removeWindowObject(window) {
+        this.element.removeChild(window.element);
+        this.windows.splice(this.windows.indexOf(window), 1)[0];
+    }
+    clear() {
+        this.element.innerText = "";
     }
 }
 class System {
@@ -236,8 +337,16 @@ class System {
     addWindow(name, x, y) {
         this.windowManager.addWindow(name, x, y);
     }
-    addFile(name) {
-        let file = new BaseFile(this.fileTemplate, name, PositionMode.ABSOLUTE, Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+    addFile(name, type) {
+        let file;
+        switch (type) {
+            case FileTypes.TEXT:
+                file = new Text(this, this.fileTemplate, name, "", PositionMode.ABSOLUTE, Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+                break;
+            default:
+                file = new BaseFile(this, this.fileTemplate, name, PositionMode.ABSOLUTE, Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+                break;
+        }
         this.directory.addFile(file);
         // this.element.appendChild(file.element);
         return file;
@@ -270,6 +379,7 @@ class System {
             let item = ev.dataTransfer.items[i];
             if (item.kind === "string") {
                 item.getAsString((data) => {
+                    console.log(`system received ${data}`);
                     let fileData = JSON.parse(data);
                     this.moveFile(fileData.name, ev.clientX, ev.clientY);
                 });
@@ -282,5 +392,5 @@ class System {
         this.mouseY = ev.clientY;
     }
 }
-export { Text, Folder, Image, Drive, System };
+export { Text, Folder, Image, Drive, System, FileTypes };
 //# sourceMappingURL=os.js.map

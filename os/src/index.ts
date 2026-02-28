@@ -1,4 +1,4 @@
-import { System } from "./os.js";
+import { System, FileTypes } from "./os.js";
 
 const sysTemplate = document.getElementById(
   "system-template",
@@ -19,9 +19,8 @@ let sys = new System(
   directoryTemplate,
   windowTemplate,
 );
-sys.addFile("this is");
-sys.addFile("not a");
-sys.addFile("test");
-sys.addFile("test");
-sys.addWindow("testy", 0, 0);
+sys.addFile("this is", FileTypes.TEXT);
+sys.addFile("not a", FileTypes.TEXT);
+sys.addFile("test", FileTypes.TEXT);
+sys.addFile("test", FileTypes.TEXT);
 sys.appendSystem(document.body);

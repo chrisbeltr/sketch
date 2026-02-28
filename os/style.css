@@ -13,6 +13,8 @@
   --file-height: 140px;
   --icon-width: 75px;
   --icon-height: 75px;
+  --window-height: 500px;
+  --window-width: 800px;
 
   /* colors */
   --test-light: #d6d6d6;
@@ -114,12 +116,15 @@ body {
 .window {
   position: absolute;
   z-index: 0;
-  width: 800px;
-  height: 500px;
+  width: var(--window-width);
+  height: var(--window-height);
   background-color: var(--test-dark);
 
   display: flex;
   flex-direction: column;
+}
+.window * {
+  user-select: none;
 }
 
 .window-header {
@@ -146,4 +151,8 @@ body {
 .window-header-button {
   height: 24px;
   width: 24px;
+}
+
+.close {
+  cursor: pointer;
 }
