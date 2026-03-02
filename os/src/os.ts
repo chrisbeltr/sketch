@@ -680,6 +680,7 @@ class System {
     this.element.addEventListener("dragover", this.onDragOver);
     this.element.addEventListener("drop", this.onDrop.bind(this));
     this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
+    this.element.addEventListener("mouseup", this.onMouseUp.bind(this));
   }
 
   addWindow(name: string, x: number, y: number) {
@@ -813,6 +814,12 @@ class System {
     // console.log(`mousemove: ${ev.clientX}, ${ev.clientY}`);
     this.mouseX = ev.clientX;
     this.mouseY = ev.clientY;
+  }
+  // fix for mouseup while not hovering window
+  onMouseUp(ev: MouseEvent) {
+    this.windowManager.windows.forEach((window) => {
+      window.dragging = false;
+    });
   }
 }
 
