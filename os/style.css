@@ -17,8 +17,13 @@
   --window-width: 800px;
 
   /* colors */
-  --test-light: #d6d6d6;
-  --test-dark: #a6a6a6;
+  --gray-light: #d6d6d6;
+  --gray-dark: #a6a6a6;
+  --text-icon: #5F9FD4;
+  --folder-icon: #a6a6a6;
+  --image-icon: #D3E56B;
+  --drive-icon: #E28D8D;
+  --user-icon: #D4AF34;
   --select-background: rgba(164, 208, 236, 0.44);
   --select-border: #2F64E9;
 }
@@ -45,8 +50,17 @@ body {
   left: 0;  
 }
 
+.directory {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .file {
-  position: absolute;
+  position: relative;
   z-index: 0;
   width: var(--file-width);
   height: var(--file-height);
@@ -73,16 +87,32 @@ body {
   height: var(--icon-height);
   flex-shrink: 0;
   
-  background-color: var(--test-dark);
+  background-color: var(--gray-dark);
+}
+.file.text .file-icon {
+  background-color: var(--text-icon);
+}
+.file.folder .file-icon {
+  background-color: var(--folder-icon);
+}
+.file.image .file-icon {
+  background-color: var(--image-icon);
+}
+.file.drive .file-icon {
+  background-color: var(--drive-icon);
+}
+.file.user .file-icon {
+  background-color: var(--user-icon);
 }
 
 .file-name {
   max-width: calc(var(--file-width) - 20px);
   height: 30px;
-  background-color: var(--test-light);
+  background-color: var(--gray-light);
   padding: 5px;
   flex-grow: 0;
   
+  color: black;
   font-family: "Inter", sans-serif;
   font-size: 1rem;
   text-align: center;
@@ -118,7 +148,8 @@ body {
   z-index: 0;
   width: var(--window-width);
   height: var(--window-height);
-  background-color: var(--test-dark);
+  background-color: var(--gray-light);
+  border: var(--gray-light) 1px solid;
 
   display: flex;
   flex-direction: column;
@@ -130,7 +161,7 @@ body {
 .window-header {
   padding: 10px;
   height: 44px;
-  background-color: var(--test-light);
+  background-color: var(--gray-light);
 
   display: flex;
   justify-content: space-between;
@@ -140,7 +171,7 @@ body {
   font-family: "Inter", sans-serif;
   font-size: 1.2rem;
   font-weight: 500;
-  color: var(--test-dark);
+  color: var(--gray-dark);
 }
 
 .window-header-buttons {
@@ -155,4 +186,17 @@ body {
 
 .close {
   cursor: pointer;
+}
+
+.window-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  background-color: var(--gray-dark);
+
+  color: var(--gray-light);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
 }
