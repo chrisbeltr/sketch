@@ -68,6 +68,10 @@ class BaseFile {
             Number(window
                 .getComputedStyle(document.documentElement)
                 .getPropertyValue("--file-height")
+                .slice(0, -2)) -
+            Number(window
+                .getComputedStyle(document.documentElement)
+                .getPropertyValue("--footer-height")
                 .slice(0, -2)));
         let left = clamp(x + this.offsetX, 0, window.innerWidth -
             Number(window
@@ -335,6 +339,10 @@ class Window {
             Number(window
                 .getComputedStyle(document.documentElement)
                 .getPropertyValue("--window-height")
+                .slice(0, -2)) -
+            Number(window
+                .getComputedStyle(document.documentElement)
+                .getPropertyValue("--footer-height")
                 .slice(0, -2)));
         let left = clamp(x + this.offsetX, 0, window.innerWidth -
             Number(window
@@ -441,6 +449,7 @@ class System {
         this.element.addEventListener("dragover", this.onDragOver);
         this.element.addEventListener("drop", this.onDrop.bind(this));
         this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
+        this.element.addEventListener("mouseup", this.onMouseUp.bind(this));
     }
     addWindow(name, x, y) {
         return this.windowManager.addWindow(name, x, y);
@@ -512,6 +521,12 @@ class System {
         // console.log(`mousemove: ${ev.clientX}, ${ev.clientY}`);
         this.mouseX = ev.clientX;
         this.mouseY = ev.clientY;
+    }
+    // fix for mouseup while not hovering window
+    onMouseUp(ev) {
+        this.windowManager.windows.forEach((window) => {
+            window.dragging = false;
+        });
     }
 }
 export { Text, Folder, Image, Drive, System, FileTypes };

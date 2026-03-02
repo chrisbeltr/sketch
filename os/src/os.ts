@@ -108,6 +108,12 @@ class BaseFile {
             .getComputedStyle(document.documentElement)
             .getPropertyValue("--file-height")
             .slice(0, -2),
+        ) -
+        Number(
+          window
+            .getComputedStyle(document.documentElement)
+            .getPropertyValue("--footer-height")
+            .slice(0, -2),
         ),
     );
     let left = clamp(
@@ -518,6 +524,12 @@ class Window {
             .getComputedStyle(document.documentElement)
             .getPropertyValue("--window-height")
             .slice(0, -2),
+        ) -
+        Number(
+          window
+            .getComputedStyle(document.documentElement)
+            .getPropertyValue("--footer-height")
+            .slice(0, -2),
         ),
     );
     let left = clamp(
@@ -714,10 +726,10 @@ class System {
           this.directoryTemplate,
           PositionMode.ABSOLUTE,
           x,
-          y
+          y,
         );
         break;
-      
+
       case FileTypes.IMAGE:
         file = new Image(
           this,
@@ -726,7 +738,7 @@ class System {
           name,
           PositionMode.ABSOLUTE,
           x,
-          y
+          y,
         );
 
       case FileTypes.DRIVE:
@@ -737,7 +749,7 @@ class System {
           name,
           PositionMode.ABSOLUTE,
           x,
-          y
+          y,
         );
 
       case FileTypes.USER:

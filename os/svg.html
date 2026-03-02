@@ -2,56 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, minimum-scale=1.0, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet" />
-    <script type="module" src="./dist/index.js"></script>
-    <title>OwOS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        display: flex;
+        flex-wrap: wrap;
+        background-color: #a6a6a6;
+      }
+
+      svg {
+        height: 75px;
+        fill: #d6d6d6;
+      }
+    </style>
+    <title>Document</title>
   </head>
   <body>
-    <template id="file-template">
-      <div class="file" draggable="true" tabindex="0">
-        <div class="file-icon"></div>
-        <div class="file-name"></div>
-        <div class="file-select"></div>
-      </div>
-    </template>
-    <template id="directory-template"><div class="directory"></div></template>
-    <template id="system-template"
-      ><div class="system"><div class="window-manager"></div></div
-    ></template>
-    <template id="window-template">
-      <div class="window">
-        <div class="window-header">
-          <div class="window-header-name">test name</div>
-          <div class="window-header-buttons">
-            <img
-              src="./images/min.svg"
-              alt="minimize"
-              class="window-header-button minimize" />
-            <img
-              src="./images/max.svg"
-              alt="maximize"
-              class="window-header-button maximize" />
-            <img
-              src="./images/close.svg"
-              alt="close"
-              class="window-header-button close" />
-          </div>
-        </div>
-        <div class="window-body"></div>
-      </div>
-    </template>
-    <div id="footer" style="z-index: 3">
-      <div id="footer-left">
-        <div id="footer-left-icons">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+    <svg
+            style="display: inline"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 640 640">
             <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
             <path
               d="M320 176C311.2 176 304 168.8 304 160L304 144C304 99.8 339.8 64 384 64L400 64C408.8 64 416 71.2 416 80L416 96C416 140.2 380.2 176 336 176L320 176zM96 352C96 275.7 131.7 192 208 192C235.3 192 267.7 202.3 290.7 211.3C309.5 218.6 330.6 218.6 349.4 211.3C372.3 202.4 404.8 192 432.1 192C508.4 192 544.1 275.7 544.1 352C544.1 480 464.1 576 384.1 576C367.6 576 346 569.4 332.6 564.7C324.5 561.9 315.7 561.9 307.6 564.7C294.2 569.4 272.6 576 256.1 576C176.1 576 96.1 480 96.1 352z" />
@@ -246,101 +216,5 @@
             <path
               d="M64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM376.6 127.7C370.4 121.5 360.2 121.5 354 127.7L320 161.6L286.1 127.7C279.9 121.5 269.7 121.5 263.5 127.7C257.3 133.9 257.3 144.1 263.5 150.3L297.4 184.2L252.1 229.5L195.5 172.9C189.3 166.7 179.1 166.7 172.9 172.9C166.7 179.1 166.7 189.3 172.9 195.5L229.5 252.1L184.2 297.4L150.3 263.5C144.1 257.3 133.9 257.3 127.7 263.5C121.5 269.7 121.5 279.9 127.7 286.1L161.6 320L127.7 353.9C121.5 360.1 121.5 370.3 127.7 376.5C133.9 382.7 144.1 382.7 150.3 376.5L184.2 342.6L229.5 387.9L172.9 444.5C166.7 450.7 166.7 460.9 172.9 467.1C179.1 473.3 189.3 473.3 195.5 467.1L252.1 410.5L297.4 455.8L263.5 489.7C257.3 495.9 257.3 506.1 263.5 512.3C269.7 518.5 279.9 518.5 286.1 512.3L320 478.4L353.9 512.3C360.1 518.5 370.3 518.5 376.5 512.3C382.7 506.1 382.7 495.9 376.5 489.7L342.6 455.8L387.9 410.5L444.5 467.1C450.7 473.3 460.9 473.3 467.1 467.1C473.3 460.9 473.3 450.7 467.1 444.5L410.5 387.9L455.8 342.6L489.7 376.5C495.9 382.7 506.1 382.7 512.3 376.5C518.5 370.3 518.5 360.1 512.3 353.9L478.4 320L512.3 286.1C518.5 279.9 518.5 269.7 512.3 263.5C506.1 257.3 495.9 257.3 489.7 263.5L455.8 297.4L410.5 252.1L467.1 195.5C473.3 189.3 473.3 179.1 467.1 172.9C460.9 166.7 450.7 166.7 444.5 172.9L387.9 229.5L342.6 184.2L376.5 150.3C382.7 144.1 382.7 133.9 376.5 127.7zM206.9 320L252.2 274.7L297.5 320L252.2 365.3L206.9 320zM274.8 387.9L320.1 342.6L365.4 387.9L320.1 433.2L274.8 387.9zM342.6 320L387.9 274.7L433.2 320L387.9 365.3L342.6 320zM365.2 252.1L319.9 297.4L274.6 252.1L319.9 206.8L365.2 252.1z" />
           </svg>
-          <svg
-            id="footer-left-icons-paw"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 640 640">
-            <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-            <path
-              d="M298.5 156.9C312.8 199.8 298.2 243.1 265.9 253.7C233.6 264.3 195.8 238.1 181.5 195.2C167.2 152.3 181.8 109 214.1 98.4C246.4 87.8 284.2 114 298.5 156.9zM164.4 262.6C183.3 295 178.7 332.7 154.2 346.7C129.7 360.7 94.5 345.8 75.7 313.4C56.9 281 61.4 243.3 85.9 229.3C110.4 215.3 145.6 230.2 164.4 262.6zM133.2 465.2C185.6 323.9 278.7 288 320 288C361.3 288 454.4 323.9 506.8 465.2C510.4 474.9 512 485.3 512 495.7L512 497.3C512 523.1 491.1 544 465.3 544C453.8 544 442.4 542.6 431.3 539.8L343.3 517.8C328 514 312 514 296.7 517.8L208.7 539.8C197.6 542.6 186.2 544 174.7 544C148.9 544 128 523.1 128 497.3L128 495.7C128 485.3 129.6 474.9 133.2 465.2zM485.8 346.7C461.3 332.7 456.7 295 475.6 262.6C494.5 230.2 529.6 215.3 554.1 229.3C578.6 243.3 583.2 281 564.3 313.4C545.4 345.8 510.3 360.7 485.8 346.7zM374.1 253.7C341.8 243.1 327.2 199.8 341.5 156.9C355.8 114 393.6 87.8 425.9 98.4C458.2 109 472.8 152.3 458.5 195.2C444.2 238.1 406.4 264.3 374.1 253.7z" />
-          </svg>
-        </div>
-        <script>
-          let iconsAll = Array.from(
-            document.querySelectorAll(
-              "#footer-left-icons svg:not(#footer-left-icons-paw)",
-            ),
-          );
-          let iconPaw = document.getElementById("footer-left-icons-paw");
-          let icons = [];
-          for (let i = 0; i < 4; i++) {
-            icons.push(
-              iconsAll.splice(
-                Math.floor(Math.random() * iconsAll.length),
-                1,
-              )[0],
-            );
-          }
-          window.addEventListener("DOMContentLoaded", () => {
-            icons[0].style.display = "inline";
-            setTimeout(() => {
-              icons[0].style.display = "none";
-              icons[1].style.display = "inline";
-            }, 500);
-            setTimeout(() => {
-              icons[1].style.display = "none";
-              icons[2].style.display = "inline";
-            }, 1000);
-            setTimeout(() => {
-              icons[2].style.display = "none";
-              icons[3].style.display = "inline";
-            }, 1500);
-            setTimeout(() => {
-              icons[3].style.display = "none";
-              iconPaw.style.display = "inline";
-            }, 2000);
-          });
-        </script>
-      </div>
-      <div id="footer-right">
-        <div id="footer-right-date">...</div>
-        <div id="footer-right-time">...</div>
-        <div id="footer-right-wifi">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-            <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-            <path
-              d="M320 160C229.1 160 146.8 196 86.3 254.6C73.6 266.9 53.3 266.6 41.1 253.9C28.9 241.2 29.1 220.9 41.8 208.7C113.7 138.9 211.9 96 320 96C428.1 96 526.3 138.9 598.3 208.7C611 221 611.3 241.3 599 253.9C586.7 266.5 566.4 266.9 553.8 254.6C493.2 196 410.9 160 320 160zM272 496C272 469.5 293.5 448 320 448C346.5 448 368 469.5 368 496C368 522.5 346.5 544 320 544C293.5 544 272 522.5 272 496zM200 390.2C188.3 403.5 168.1 404.7 154.8 393C141.5 381.3 140.3 361.1 152 347.8C193 301.4 253.1 272 320 272C386.9 272 447 301.4 488 347.8C499.7 361.1 498.4 381.3 485.2 393C472 404.7 451.7 403.4 440 390.2C410.6 356.9 367.8 336 320 336C272.2 336 229.4 356.9 200 390.2z" />
-          </svg>
-        </div>
-        <div id="footer-right-battery">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-            <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-            <path
-              d="M528 192C536.8 192 544 199.2 544 208L544 432C544 440.8 536.8 448 528 448L112 448C103.2 448 96 440.8 96 432L96 208C96 199.2 103.2 192 112 192L528 192zM112 128C67.8 128 32 163.8 32 208L32 432C32 476.2 67.8 512 112 512L528 512C572.2 512 608 476.2 608 432L608 384C625.7 384 640 369.7 640 352L640 288C640 270.3 625.7 256 608 256L608 208C608 163.8 572.2 128 528 128L112 128zM168 240C154.7 240 144 250.7 144 264L144 376C144 389.3 154.7 400 168 400L392 400C405.3 400 416 389.3 416 376L416 264C416 250.7 405.3 240 392 240L168 240z" />
-          </svg>
-          72%
-        </div>
-      </div>
-      <script>
-        const dateElem = document.getElementById("footer-right-date");
-        const timeElem = document.getElementById("footer-right-time");
-
-        function getTime() {
-          let date = new Date(Date.now());
-          let formatOptions = {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-            hourCycle: "h24",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-          };
-          let formatted = new Intl.DateTimeFormat(undefined, formatOptions)
-            .formatToParts(date)
-            .filter((d) => {
-              return d.type != "literal";
-            })
-            .flatMap((d) => {
-              return d.value;
-            });
-          dateElem.textContent = `${formatted[0]} ${formatted[1]} ${formatted[2]}`;
-          timeElem.textContent = `${formatted[3]}:${formatted[4]}:${formatted[5]}`;
-        }
-
-        getTime();
-        setInterval(getTime, 1000);
-      </script>
-    </div>
   </body>
 </html>
