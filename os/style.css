@@ -157,6 +157,8 @@ body {
   z-index: 0;
   width: var(--window-width);
   height: var(--window-height);
+  max-width: 100dvw;
+  max-height: 100dvh;
   background-color: var(--gray-light);
   border: var(--gray-light) 1px solid;
 
