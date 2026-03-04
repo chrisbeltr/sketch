@@ -287,7 +287,7 @@ class User extends BaseFile {
                     switch (fileData.type) {
                         case FileTypes.TEXT:
                             let textFile = file;
-                            windowObj.bodyElement.textContent = textFile.content;
+                            windowObj.bodyElement.innerHTML = textFile.content;
                             break;
                         case FileTypes.FOLDER:
                             let folderFile = file;
