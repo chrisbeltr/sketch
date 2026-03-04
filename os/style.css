@@ -271,6 +271,8 @@ body {
 
   display: flex;
   justify-content: space-between;
+  flex-basis: 0;
+  flex-grow: 0;
   gap: 7.5px;
 }
 #footer-right * {
@@ -278,11 +280,21 @@ body {
   fill: var(--gray-light);
 }
 #footer-right svg {
-  height: 100%;
+  aspect-ratio: 1;
+  width: 25px;
+  height: 25px;
 }
 #footer-right > * {
   display: flex;
   align-items: center;
+}
+
+#footer-right-date {
+  width: max-content;
+}
+
+#footer-right-time {
+  font-variant-numeric: tabular-nums;
 }
 
 #footer-right-battery {

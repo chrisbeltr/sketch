@@ -11,13 +11,15 @@ const scaledHeight = iHeight / zoom;
 const scaledWidth = iWidth / zoom;
 let readme = sys.addFile("README.md", FileTypes.TEXT);
 readme.content = `hi there! welcome to my little web operating system! it works a little differently to what you might be used to from your own operating system, so let me give you some guidance :3<br><br>there are a few different file types here:<br><ul><li>text files are blue</li><li>folders are purple</li><li>your user file is golden</li></ul>you can think of the golden user file as a representation of you, the user! that does not mean you can move it around with WASD like a video game character, but your actions in this operating system will revolve around this user file, so keep that mind!<br><br>here's how you interact with the operating system:<br><ul><li>drag files around to move them!</li><li>drag files on top of user.lnk to open them!</li><li>drag windows around to move them and close them with the close button!</li><li>you cannot drag files into or out of folders :(</li><li>please don't drag windows too quickly or they might stop being dragged, sorry!</li></ul><br>have fun and enjoy! this took a long time to make ;-;`;
-cookieStore.get("readme").then((cookie) => {
-    if (!cookie) {
-        let readmeWindow = sys.addWindow("README.md", 100, 100);
-        readmeWindow.bodyElement.innerHTML = readme.content;
-        cookieStore.set("readme", "read");
-    }
-});
+if (typeof cookieStore !== "undefined") {
+    cookieStore.get("readme").then((cookie) => {
+        if (!cookie) {
+            let readmeWindow = sys.addWindow("README.md", 100, 100);
+            readmeWindow.bodyElement.innerHTML = readme.content;
+            cookieStore.set("readme", "read");
+        }
+    });
+}
 let reflection = sys.addFile("reflection.txt", FileTypes.TEXT);
 reflection.content = `<ul><li>i could've made this prettier i think, i just ran out of time and didn't think about the actual design very much</li><li>i need to fix the dragging somehow</li><li>this code is NOT clean at ALL there's tons of weird system design choices i made</li><li>i only implemented two of the filetypes i wanted to, i had planned to make image files and "drives" which would take you to other "desktops"</li><li>in order to push things to the top, i remove them from the DOM and add them back in, which is not the most elegant of solutions. this is quite noticeable if you drag a window that has an iframe in it, as it will refresh the page inside the iframe every time you start dragging it</li></ul>`;
 let homework = sys.addFile("homework", FileTypes.FOLDER);
