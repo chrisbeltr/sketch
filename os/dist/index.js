@@ -32,7 +32,8 @@ poster.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zo
 let still = homework.addFile("still.html", FileTypes.TEXT);
 still.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="still" src="https://sketch.borks.dev/still"></iframe>`;
 let recurse = homework.addFile("os.ts", FileTypes.TEXT);
-recurse.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="recursing..." src="https://sketch.borks.dev/os"></iframe>`;
+// console.log(document.baseURI);
+recurse.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="recursing..." src="${document.baseURI}?"></iframe>`;
 let homepage = sys.addFile("homepage.html", FileTypes.TEXT);
 homepage.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="recursing..." src="https://borks.dev/"></iframe>`;
 let convo1 = sys.addFile("this", FileTypes.FOLDER);
