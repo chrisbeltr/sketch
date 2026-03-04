@@ -430,7 +430,7 @@ class User extends BaseFile {
       let item = ev.dataTransfer.items[i]!;
       if (item.kind === "string") {
         item.getAsString((data) => {
-          console.log(`${this.name} received ${data}`);
+          // console.log(`${this.name} received ${data}`);
           let fileData: FileJSONData = JSON.parse(data);
           if (fileData.parent != this.parent) return;
           let file = this.directory.getFile(fileData.name)!;
@@ -813,7 +813,7 @@ class System {
       let item = ev.dataTransfer.items[i]!;
       if (item.kind === "string") {
         item.getAsString((data) => {
-          console.log(`system received ${data}`);
+          // console.log(`system received ${data}`);
           let fileData: FileJSONData = JSON.parse(data);
           if (fileData.parent != "system") return;
           this.moveFile(fileData.name, ev.clientX, ev.clientY);
