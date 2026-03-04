@@ -43,15 +43,15 @@ reflection.content = `<ul><li>i could've made this prettier i think, i just ran 
 
 let homework = sys.addFile("homework", FileTypes.FOLDER) as Folder;
 let phase1 = homework.addFile("phase1.html", FileTypes.TEXT) as Text;
-phase1.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="phase1" src="https://sketch.borks.dev/phase1?ex=true"></iframe>`;
+phase1.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="phase1" src="https://sketch.borks.dev/phase1"></iframe>`;
 let phase2 = homework.addFile("phase2.html", FileTypes.TEXT) as Text;
-phase2.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="phase2" src="https://sketch.borks.dev/phase2?ex=true"></iframe>`;
+phase2.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="phase2" src="https://sketch.borks.dev/phase2"></iframe>`;
 let poster = homework.addFile("poster.html", FileTypes.TEXT) as Text;
-poster.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="poster" src="https://sketch.borks.dev/poster?ex=true"></iframe>`;
+poster.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="poster" src="https://sketch.borks.dev/poster"></iframe>`;
 let still = homework.addFile("still.html", FileTypes.TEXT) as Text;
-still.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="still" src="https://sketch.borks.dev/still?ex=true"></iframe>`;
+still.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="still" src="https://sketch.borks.dev/still"></iframe>`;
 let recurse = homework.addFile("os.ts", FileTypes.TEXT) as Text;
-recurse.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="recursing..." src="https://sketch.borks.dev/os?ex=true"></iframe>`;
+recurse.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="recursing..." src="https://sketch.borks.dev/os"></iframe>`;
 
 let homepage = sys.addFile("homepage.html", FileTypes.TEXT) as Text;
 homepage.content = `<iframe style="position: absolute; top: 0; left: 0; zoom: ${zoom};" height="${scaledHeight}" width="${scaledWidth}" loading="lazy" title="recursing..." src="https://borks.dev/"></iframe>`;
