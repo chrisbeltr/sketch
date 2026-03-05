@@ -39,7 +39,7 @@ if (typeof cookieStore !== "undefined") {
 }
 
 let reflection = sys.addFile("reflection.txt", FileTypes.TEXT) as Text;
-reflection.content = `<ul><li>i could've made this prettier i think, i just ran out of time and didn't think about the actual design very much</li><li>i need to fix the dragging somehow</li><li>this code is NOT clean at ALL there's tons of weird system design choices i made</li><li>i only implemented two of the filetypes i wanted to, i had planned to make image files and "drives" which would take you to other "desktops"</li><li>in order to push things to the top, i remove them from the DOM and add them back in, which is not the most elegant of solutions. this is quite noticeable if you drag a window that has an iframe in it, as it will refresh the page inside the iframe every time you start dragging it</li></ul>`;
+reflection.content = `<ul><li>i could've made this prettier i think, i just ran out of time and didn't think about the actual design very much</li><li>this code is NOT clean at ALL there's tons of weird system design choices i made</li><li>i only implemented two of the filetypes i wanted to, i had planned to make image files and "drives" which would take you to other "desktops"</li><li>in order to push things to the top, i remove them from the DOM and add them back in, which is not the most elegant of solutions. this is quite noticeable if you drag a window that has an iframe in it, as it will refresh the page inside the iframe every time you start dragging it</li></ul>`;
 
 let homework = sys.addFile("homework", FileTypes.FOLDER) as Folder;
 let phase1 = homework.addFile("phase1.html", FileTypes.TEXT) as Text;

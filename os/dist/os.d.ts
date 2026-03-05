@@ -121,7 +121,6 @@ declare class System {
     onDragOver(ev: DragEvent): void;
     onDrop(ev: DragEvent): void;
     onMouseMove(ev: MouseEvent): void;
-    onMouseUp(ev: MouseEvent): void;
 }
 export { Text, Folder, Image, Drive, System, FileTypes };
 //# sourceMappingURL=os.d.ts.map

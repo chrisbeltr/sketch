@@ -328,9 +328,8 @@ class Window {
         this.moveWindow(x, y);
         this.closeElement.addEventListener("mousedown", this.onClose.bind(this));
         this.headerElement.addEventListener("mousedown", this.onDragStart.bind(this));
-        this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
-        this.headerElement.addEventListener("mouseup", this.onDragEnd.bind(this));
-        this.element.addEventListener("mouseup", this.onDragEnd.bind(this));
+        window.addEventListener("mousemove", this.onMouseMove.bind(this));
+        window.addEventListener("mouseup", this.onDragEnd.bind(this));
         this.element.addEventListener("mousedown", this.onClick.bind(this));
         this.element.addEventListener("drop", this.onDrop.bind(this));
     }
@@ -449,7 +448,6 @@ class System {
         this.element.addEventListener("dragover", this.onDragOver);
         this.element.addEventListener("drop", this.onDrop.bind(this));
         this.element.addEventListener("mousemove", this.onMouseMove.bind(this));
-        this.element.addEventListener("mouseup", this.onMouseUp.bind(this));
     }
     addWindow(name, x, y) {
         return this.windowManager.addWindow(name, x, y);
@@ -521,12 +519,6 @@ class System {
         // console.log(`mousemove: ${ev.clientX}, ${ev.clientY}`);
         this.mouseX = ev.clientX;
         this.mouseY = ev.clientY;
-    }
-    // fix for mouseup while not hovering window
-    onMouseUp(ev) {
-        this.windowManager.windows.forEach((window) => {
-            window.dragging = false;
-        });
     }
 }
 export { Text, Folder, Image, Drive, System, FileTypes };
