@@ -6,7 +6,9 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Iosevka+Charon+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=M+PLUS+Rounded+1c&display=swap"
+        rel="stylesheet">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=0">
     <title>10print</title>
 </head>
@@ -41,9 +43,14 @@
     let s = nn.random(70, 100);
     let l = nn.random(30, 70);
 
+    let a = Math.floor(nn.random(0, 2));
+    console.log(a === 0)
     let fs = nn.random(2.5, 4);
     let lh = nn.random(2.5, fs);
-    let w = nn.create("div").set({ id: "w" }).css({ lineHeight: `${lh}rem`, fontSize: `${fs}rem` });
+    let w; w = nn.create("div").set({ id: "w" }).css({ lineHeight: `${lh}rem`, fontSize: `${fs}rem` });
+    if (a === 1) {
+        w = w.css({ fontFamily: "Iosevka Charon Mono" });
+    }
     document.body.appendChild(w);
 
     function createCharacter() {
@@ -53,14 +60,23 @@
         s = nn.clamp(nn.random(s - 3, s + 4), 70, 100);
         l = nn.clamp(nn.random(l - 3, l + 4), 30, 70);
 
-        let c = nn.random("░▒▓█")
-        // full list of characters i tried
+        let c;
+        if (a === 0) {
+            c = nn.random("░▒▓█");
+        } else {
+            c = nn.random("🬀🬁🬂🬃🬄🬅🬆🬇🬈🬉🬊🬋🬌🬍🬎🬏🬐🬑🬒🬓🬔🬕🬖🬗🬘🬙🬚🬛🬜🬝🬞🬟🬠🬡🬢🬣🬤🬥🬦🬧🬨🬩🬪🬫🬬🬭🬮🬯🬰🬱🬲🬳🬴🬵🬶🬷🬸🬹🬺🬻");
+        }
+        // some other characters i tried
         // let c = nn.random("░▒▓█🮐🮘🮙𜱃⣿")
 
-        let o = nn.create("div")
+        let o = nn.create("div");
         o.content(c).css({ color: nn.hsl(h, s, l), display: "inline-block" });
         w.appendChild(o);
-        setTimeout(() => { w.removeChild(o); }, nn.random(8000, 15000));
+        if (a === 0) {
+            setTimeout(() => { w.removeChild(o); }, nn.random(15000, 25000));
+        } else {
+            setTimeout(() => { w.removeChild(o); }, nn.random(20000, 35000));
+        }
     }
 
     createCharacter();
