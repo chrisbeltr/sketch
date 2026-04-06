@@ -1,0 +1,63 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Gothic+A1&family=M+PLUS+Rounded+1c&family=Murecho:wght@100..900&display=swap"
+        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=0">
+    <title>wh</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+</body>
+<!-- ^ extern ^ -->
+
+<!-- v 10prnt v -->
+<style>
+    body {
+        max-height: 100dvh;
+        max-width: 100dvw;
+        margin: 0;
+
+        /* overflow-y: hidden; */
+    }
+
+    #w {
+        position: absolute;
+        bottom: 0;
+        min-height: 100dvh;
+
+        overflow-y: hidden;
+        overflow-wrap: anywhere;
+        font-family: "M PLUS Rounded 1c";
+        font-size: 4rem;
+    }
+</style>
+<script>
+    /* global nn */
+    let h = nn.random(0, 360);
+    let s = 100;
+    let l = 70;
+
+    let w = nn.create("div").set({ id: "w" }).css("line-height", `${nn.random(2.5, 4)}rem`);
+    document.body.appendChild(w);
+
+    function createCharacter() {
+
+        setTimeout(createCharacter, nn.random(1000 / 120, 1000 / 25));
+
+        h = nn.random(h - 5, h + 6) % 360;
+
+        let c = nn.random("░▒▓█")
+        // full list of characters i tried
+        // let c = nn.random("░▒▓█🮐🮘🮙𜱃⣿")
+
+        let o = nn.create("div")
+        o.content(c).css({ color: nn.hsl(h, s, l), display: "inline-block" });
+        w.appendChild(o);
+        setTimeout(() => { w.removeChild(o); }, nn.random(8000, 15000));
+
+    }
+
+    createCharacter();
+</script>
