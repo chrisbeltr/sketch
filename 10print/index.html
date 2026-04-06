@@ -2,15 +2,15 @@
      for a better(?) mobile experience:
      https://sketch.borks.dev/10print
 -->
+
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=0">
-    <title>wh</title>
+    <title>10print</title>
 </head>
+
 <body>
     <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
 </body>
@@ -38,16 +38,20 @@
 <script>
     /* global nn */
     let h = nn.random(0, 360);
-    let s = 100;
-    let l = 70;
+    let s = nn.random(70, 100);
+    let l = nn.random(30, 70);
 
-    let w = nn.create("div").set({ id: "w" }).css("line-height", `${nn.random(2.5, 4)}rem`);
+    let fs = nn.random(2.5, 4);
+    let lh = nn.random(2.5, fs);
+    let w = nn.create("div").set({ id: "w" }).css({ lineHeight: `${lh}rem`, fontSize: `${fs}rem` });
     document.body.appendChild(w);
 
     function createCharacter() {
         setTimeout(createCharacter, nn.random(1000 / 120, 1000 / 25));
 
         h = nn.random(h - 5, h + 6) % 360;
+        s = nn.clamp(nn.random(s - 3, s + 4), 70, 100);
+        l = nn.clamp(nn.random(l - 3, l + 4), 30, 70);
 
         let c = nn.random("░▒▓█")
         // full list of characters i tried
