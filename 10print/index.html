@@ -1,6 +1,6 @@
 <!--
     for the original netnet code:
-    https://py.md/XUaeu
+    https://py.md/wXxMG
 -->
 
 <head>
@@ -56,9 +56,9 @@
     function createCharacter() {
         setTimeout(createCharacter, nn.random(1000 / 120, 1000 / 25));
 
-        h = nn.random(h - 5, h + 6) % 360;
-        s = nn.clamp(nn.random(s - 3, s + 4), 70, 100);
-        l = nn.clamp(nn.random(l - 3, l + 4), 30, 70);
+        h = nn.random(h - 5, h + 5.2) % 360;
+        s = nn.clamp(nn.random(s - 3, s + 3), 70, 100);
+        l = nn.clamp(nn.random(l - 3, l + 3), 30, 70);
 
         let c;
         if (a === 0) {
