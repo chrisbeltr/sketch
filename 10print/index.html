@@ -1,9 +1,6 @@
-<!-- 
-     for a better(?) mobile experience:
-     https://sketch.borks.dev/10print
-
-     for the original netnet code:
-     https://py.md/XUaeu
+<!--
+    for the original netnet code:
+    https://py.md/XUaeu
 -->
 
 <head>
@@ -75,11 +72,8 @@
         let o = nn.create("div");
         o.content(c).css({ color: nn.hsl(h, s, l), display: "inline-block" });
         w.appendChild(o);
-        if (a === 0) {
-            setTimeout(() => { w.removeChild(o); }, nn.random(15000, 25000));
-        } else {
-            setTimeout(() => { w.removeChild(o); }, nn.random(20000, 35000));
-        }
+        // delete this if statement if things are feeling a little too chaotic
+        if (a === 0) { setTimeout(() => { w.removeChild(o); }, nn.random(15000, 25000)); } else { setTimeout(() => { w.removeChild(o); }, nn.random(20000, 35000)); }
     }
 
     createCharacter();
