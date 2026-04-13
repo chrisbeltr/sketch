@@ -1,0 +1,278 @@
+<body draggable="false">
+  <pre style="position: absolute; margin: 0; color: lightgray;">
+click and drag to slingshot a random emoji
+hold space while slingshotting to shoot a cone of random emojis
+hold shift while dragging to just draw normally (boring)
+right click to create a burst of random emojis
+  </pre>
+</body>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
+/>
+<style>
+  body {
+    margin: 0;
+    height: 100dvh;
+    width: 100dvw;
+    user-select: none;
+    overflow: hidden;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+<script>
+  /* global nn */
+
+  /*
+   * actions:
+   * click and drag to slingshot a random emoji
+   * hold space while slingshotting to shoot a cone of random emojis
+   * hold shift while dragging to just draw normally (boring)
+   * right click to create a burst of random emojis
+   */
+
+  // ! constants
+
+  const EMOJIS = "😀😃😄😁😆😅🤣😂🙂😉😊😇🥰😍🤩😘😗😚😙🥲😏";
+  const FRAMERATE = 1000 / 60;
+  const DECAY = 0.5;
+  const DRAG_FACTOR = 5;
+  const MAX_DISTANCE = 12.5;
+  const MIN_DISTANCE = 3;
+  const BURST_DENSITY = 30;
+  const CONE_DENSITY = 50;
+  const CONE_SPREAD = 10;
+
+  // ! state
+
+  let dragging = false;
+  let dragInitialX = 0;
+  let dragInitialY = 0;
+  let burst = false;
+  let cone = false;
+  let draw = false;
+  let width = nn.width;
+  let height = nn.height;
+
+  // ! utility functions
+
+  // create an object with the
+  const CREATEO_E = (e) => {
+    return (
+      nn
+        .create("span")
+        .content(e)
+        .positionOrigin("center")
+        // hopefully this helps with lag a little bit
+        .css("pointer-events", "none")
+    );
+  };
+
+  // initializing an object with an initial x, y, distance, and angle
+  const INITO_OXYDA = (o, x, y, d, a) => {
+    o.e_x = x;
+    o.e_y = y;
+    o.e_d = d;
+    o.e_a = a;
+  };
+
+  const SPAWNO_EXYDA = (e, x, y, d, a) => {
+    let o = CREATEO_E(e);
+    INITO_OXYDA(o, x, y, d, a);
+    o.addTo(c);
+    o.position(x, y);
+
+    let nt = performance.now() + FRAMERATE;
+    let f = (step) => {
+      requestAnimationFrame(f);
+      if (step > nt) {
+        nt += FRAMERATE;
+        if (o.e_d > 0) {
+          MOVEO_O(o);
+        }
+      }
+    };
+    requestAnimationFrame(f);
+  };
+
+  // get new x position based on distance and angle
+  const MOVEX_XDA = (x, d, a) => {
+    let na = Math.cos(nn.degToRad(a));
+    let nd = na * d;
+    let nx = x + nd;
+    return nx;
+  };
+
+  // get new y position based on distance and angle
+  const MOVEY_YDA = (y, d, a) => {
+    let na = Math.sin(nn.degToRad(a));
+    let nd = na * d;
+    let ny = y + nd;
+    return ny;
+  };
+
+  // mirroring logic when hitting an x axis
+  const MIRRX_A = (a) => {
+    return -a % 360;
+  };
+
+  // mirroring logic when hitting a y axis
+  const MIRRY_A = (a) => {
+    return (180 - a) % 360;
+  };
+
+  // move an object and decay distance
+  const MOVEO_O = (o) => {
+    let nx = MOVEX_XDA(o.e_x, o.e_d, o.e_a);
+    let ny = MOVEY_YDA(o.e_y, o.e_d, o.e_a);
+
+    // bounds checking
+    // x axis (top and bottom)
+    if (ny < 0 || ny >= height) {
+      o.e_a = MIRRX_A(o.e_a);
+      ny = MOVEY_YDA(o.e_y, o.e_d, o.e_a);
+    }
+    // y axis (left and right)
+    if (nx < 0 || nx >= width) {
+      o.e_a = MIRRY_A(o.e_a);
+      nx = MOVEX_XDA(o.e_x, o.e_d, o.e_a);
+    }
+
+    o.e_x = nx;
+    o.e_y = ny;
+    o.e_d -= DECAY;
+    o.position(o.e_x, o.e_y);
+  };
+
+  // ! setup
+
+  // main container
+  let c = nn
+    .create("div")
+    .css({ height: "100%", width: "100%", overflow: "hidden" });
+  c.addTo("body");
+
+  let l_s = CREATEO_E("🫥");
+  l_s.addTo("body");
+  l_s.position(0, 0);
+  let l_e = CREATEO_E("🫥");
+  l_e.addTo("body");
+  l_e.position(0, 0);
+
+  let m = CREATEO_E("🥸");
+  m.addTo("body");
+  m.position(nn.mouseX, nn.mouseY);
+
+  // ! events
+
+  // start dragging
+  window.addEventListener("mousedown", () => {
+    dragging = true;
+    dragInitialX = nn.mouseX;
+    dragInitialY = nn.mouseY;
+  });
+
+  // while dragging
+  window.addEventListener("mousemove", () => {
+    if (!draw || !dragging) return;
+
+    CREATEO_E(nn.random(EMOJIS)).addTo(c).position(nn.mouseX, nn.mouseY);
+  });
+
+  // stop dragging logic
+  function onDragStop() {
+    // need this here for single clicks
+    if (dragging && draw) {
+      CREATEO_E(nn.random(EMOJIS)).addTo(c).position(nn.mouseX, nn.mouseY);
+    }
+
+    if (!dragging || burst || draw) {
+      dragging = false;
+      burst = false;
+      return;
+    }
+    dragging = false;
+
+    let d =
+      Math.sqrt(
+        Math.pow(nn.mouseX - dragInitialX, 2) +
+          Math.pow(nn.mouseY - dragInitialY, 2),
+      ) / DRAG_FACTOR;
+    // finding angle from initial to mouse
+    let a = nn.radToDeg(
+      Math.atan2(dragInitialY - nn.mouseY, dragInitialX - nn.mouseX),
+    );
+
+    if (cone) {
+      for (let i = 0; i < CONE_DENSITY; i++) {
+        SPAWNO_EXYDA(
+          nn.random(EMOJIS),
+          dragInitialX,
+          dragInitialY,
+          nn.random(d / 2, d),
+          a + nn.random(-CONE_SPREAD, CONE_SPREAD),
+        );
+      }
+    } else {
+      SPAWNO_EXYDA(nn.random(EMOJIS), dragInitialX, dragInitialY, d, a);
+    }
+
+    m.position(nn.mouseX, nn.mouseY);
+    l_s.position(dragInitialX, dragInitialY);
+    l_e.position(nn.mouseX, nn.mouseY);
+  }
+
+  // stop dragging event
+  window.addEventListener("mouseup", onDragStop);
+  // need this for when it goes off screen
+  document.body.addEventListener("mouseleave", onDragStop);
+
+  // right click burst
+  window.addEventListener("contextmenu", (e) => {
+    // don't want the context menu to pop up or the slingshot event to fire
+    e.preventDefault();
+    burst = true;
+
+    for (let i = 0; i < BURST_DENSITY; i++) {
+      let d = nn.random(MIN_DISTANCE, MAX_DISTANCE);
+      let a = nn.random(360);
+
+      SPAWNO_EXYDA(nn.random(EMOJIS), dragInitialX, dragInitialY, d, a);
+    }
+
+    l_s.position(dragInitialX, dragInitialY);
+    l_e.position(nn.mouseX, nn.mouseY);
+  });
+
+  // listening for keyboard presses
+  window.addEventListener("keydown", (e) => {
+    if (e.code == "Space") {
+      cone = true;
+    } else if (e.code == "ShiftLeft" || e.code == "ShiftRight") {
+      draw = true;
+    }
+  });
+
+  // listening for keyboard releases
+  window.addEventListener("keyup", (e) => {
+    if (e.code == "Space") {
+      cone = false;
+    } else if (e.code == "ShiftLeft" || e.code == "ShiftRight") {
+      draw = false;
+      dragging = false;
+    }
+  });
+
+  // mouse cursor follows when not dragging
+  window.addEventListener("mousemove", () => {
+    if (!dragging) {
+      m.position(nn.mouseX, nn.mouseY);
+    }
+  });
+
+  // check for resize events
+  window.addEventListener("resize", () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+  });
+</script>
