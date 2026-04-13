@@ -1,4 +1,16 @@
-<body draggable="false"></body>
+<!--
+    original code at https://dev.netnet.studio/?c=q&layout=dock-left
+-->
+
+<body draggable="false">
+  <pre id="instructions">
+click and drag to slingshot a random emoji
+hold space while slingshotting to shoot a cone of random emojis
+right click to create a burst of random emojis
+hold shift while dragging to just draw normally (boring)
+ctrl + z to undo, ctrl + shift + z to redo
+  </pre>
+</body>
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
@@ -121,8 +133,8 @@
   };
 
   const POSITIONO_OXY = (o, x, y) => {
-    o.style.top = y - o.e_h / 2;
-    o.style.left = x - o.e_w / 2;
+    o.style.top = `${y - o.e_h / 2}px`;
+    o.style.left = `${x - o.e_w / 2}px`;
   };
 
   // get new x position based on distance and angle
