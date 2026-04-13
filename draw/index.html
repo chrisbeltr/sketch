@@ -1,11 +1,4 @@
-<body draggable="false">
-  <pre style="position: absolute; margin: 0; color: lightgray;">
-click and drag to slingshot a random emoji
-hold space while slingshotting to shoot a cone of random emojis
-hold shift while dragging to just draw normally (boring)
-right click to create a burst of random emojis
-  </pre>
-</body>
+<body draggable="false"></body>
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
@@ -18,22 +11,29 @@ right click to create a burst of random emojis
     user-select: none;
     overflow: hidden;
   }
-</style>
-<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
-<script>
-  /* global nn */
 
+  pre {
+    position: absolute;
+    margin: 0;
+    color: lightgray;
+  }
+  pre:hover {
+    color: gray;
+  }
+</style>
+<script>
   /*
    * actions:
    * click and drag to slingshot a random emoji
    * hold space while slingshotting to shoot a cone of random emojis
-   * hold shift while dragging to just draw normally (boring)
    * right click to create a burst of random emojis
+   * hold shift while dragging to just draw normally (boring)
+   * ctrl + z to undo, ctrl + shift + z to redo
    */
 
   // ! constants
 
-  const EMOJIS = "😀😃😄😁😆😅🤣😂🙂😉😊😇🥰😍🤩😘😗😚😙🥲😏";
+  const EMOJIS = Array.from("😀😃😄😁😆😅🤣😂🙂😉😊😇🥰😍🤩😘😗😚😙🥲😏");
   const FRAMERATE = 1000 / 60;
   const DECAY = 0.5;
   const DRAG_FACTOR = 5;
@@ -43,6 +43,8 @@ right click to create a burst of random emojis
   const CONE_DENSITY = 50;
   const CONE_SPREAD = 10;
 
+  const b = document.body;
+
   // ! state
 
   let dragging = false;
@@ -51,53 +53,81 @@ right click to create a burst of random emojis
   let burst = false;
   let cone = false;
   let draw = false;
-  let width = nn.width;
-  let height = nn.height;
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  let emojiHeight;
+  let emojiWidth;
+  let undo = [];
+  let redo = [];
+  let buffer = [];
 
   // ! utility functions
 
+  const DEGTORAD_A = (a) => {
+    return a * (Math.PI / 180.0);
+  };
+
+  const RADTODEG_A = (a) => {
+    return a * (180.0 / Math.PI);
+  };
+
   // create an object with the
   const CREATEO_E = (e) => {
-    return (
-      nn
-        .create("span")
-        .content(e)
-        .positionOrigin("center")
-        // hopefully this helps with lag a little bit
-        .css("pointer-events", "none")
-    );
+    let s = document.createElement("span");
+    s.textContent = e;
+    s.style.pointerEvents = "none";
+    s.style.position = "absolute";
+    return s;
   };
 
   // initializing an object with an initial x, y, distance, and angle
+  // plus height and width for convenience
   const INITO_OXYDA = (o, x, y, d, a) => {
     o.e_x = x;
     o.e_y = y;
     o.e_d = d;
     o.e_a = a;
+    o.e_h = emojiHeight;
+    o.e_w = emojiWidth;
+    o.e_v = true;
+  };
+
+  const INITLIGHTO_O = (o) => {
+    o.e_h = emojiHeight;
+    o.e_w = emojiWidth;
   };
 
   const SPAWNO_EXYDA = (e, x, y, d, a) => {
     let o = CREATEO_E(e);
+    c.appendChild(o);
     INITO_OXYDA(o, x, y, d, a);
-    o.addTo(c);
-    o.position(x, y);
+    POSITIONO_OXY(o, x, y);
+    buffer.push(o);
 
     let nt = performance.now() + FRAMERATE;
     let f = (step) => {
-      requestAnimationFrame(f);
+      if (!o.e_v) o.e_d = 0;
       if (step > nt) {
         nt += FRAMERATE;
         if (o.e_d > 0) {
           MOVEO_O(o);
+          requestAnimationFrame(f);
         }
+      } else {
+        requestAnimationFrame(f);
       }
     };
     requestAnimationFrame(f);
   };
 
+  const POSITIONO_OXY = (o, x, y) => {
+    o.style.top = y - o.e_h / 2;
+    o.style.left = x - o.e_w / 2;
+  };
+
   // get new x position based on distance and angle
   const MOVEX_XDA = (x, d, a) => {
-    let na = Math.cos(nn.degToRad(a));
+    let na = Math.cos(DEGTORAD_A(a));
     let nd = na * d;
     let nx = x + nd;
     return nx;
@@ -105,7 +135,7 @@ right click to create a burst of random emojis
 
   // get new y position based on distance and angle
   const MOVEY_YDA = (y, d, a) => {
-    let na = Math.sin(nn.degToRad(a));
+    let na = Math.sin(DEGTORAD_A(a));
     let nd = na * d;
     let ny = y + nd;
     return ny;
@@ -141,49 +171,72 @@ right click to create a burst of random emojis
     o.e_x = nx;
     o.e_y = ny;
     o.e_d -= DECAY;
-    o.position(o.e_x, o.e_y);
+    POSITIONO_OXY(o, o.e_x, o.e_y);
   };
 
   // ! setup
 
   // main container
-  let c = nn
-    .create("div")
-    .css({ height: "100%", width: "100%", overflow: "hidden" });
-  c.addTo("body");
+  //let c = nn
+  //.create("div")
+  //.css({ height: "100%", width: "100%", overflow: "hidden" });
+  //c.addTo("body");
+  let c = document.createElement("div");
+  c.style.height = "100%";
+  c.style.width = "100%";
+  c.style.overflow = "hidden";
+  b.appendChild(c);
 
   let l_s = CREATEO_E("🫥");
-  l_s.addTo("body");
-  l_s.position(0, 0);
+  b.appendChild(l_s);
+  emojiHeight = l_s.clientHeight;
+  emojiWidth = l_s.clientWidth;
+  INITLIGHTO_O(l_s);
+  POSITIONO_OXY(l_s, 0, 0);
   let l_e = CREATEO_E("🫥");
-  l_e.addTo("body");
-  l_e.position(0, 0);
+  b.appendChild(l_e);
+  INITLIGHTO_O(l_e);
+  POSITIONO_OXY(l_e, 0, 0);
 
   let m = CREATEO_E("🥸");
-  m.addTo("body");
-  m.position(nn.mouseX, nn.mouseY);
+  b.appendChild(m);
+  INITLIGHTO_O(m);
+  POSITIONO_OXY(m, 0, 0);
 
   // ! events
 
   // start dragging
-  window.addEventListener("mousedown", () => {
+  window.addEventListener("mousedown", (e) => {
     dragging = true;
-    dragInitialX = nn.mouseX;
-    dragInitialY = nn.mouseY;
+    dragInitialX = e.clientX;
+    dragInitialY = e.clientY;
   });
 
   // while dragging
-  window.addEventListener("mousemove", () => {
+  window.addEventListener("mousemove", (e) => {
     if (!draw || !dragging) return;
 
-    CREATEO_E(nn.random(EMOJIS)).addTo(c).position(nn.mouseX, nn.mouseY);
+    let o = CREATEO_E(EMOJIS[Math.floor(Math.random() * EMOJIS.length)]);
+    c.appendChild(o);
+    INITLIGHTO_O(o);
+    POSITIONO_OXY(o, e.clientX, e.clientY);
+    buffer.push(o);
   });
 
   // stop dragging logic
-  function onDragStop() {
+  function onDragStop(e) {
+    let b;
     // need this here for single clicks
     if (dragging && draw) {
-      CREATEO_E(nn.random(EMOJIS)).addTo(c).position(nn.mouseX, nn.mouseY);
+      let o = CREATEO_E(EMOJIS[Math.floor(Math.random() * EMOJIS.length)]);
+      c.appendChild(o);
+      INITLIGHTO_O(o);
+      POSITIONO_OXY(o, e.clientX, e.clientY);
+      b = Array.from(buffer);
+      b.push(o);
+      undo.push(b);
+      buffer = [];
+      redo = [];
     }
 
     if (!dragging || burst || draw) {
@@ -195,31 +248,44 @@ right click to create a burst of random emojis
 
     let d =
       Math.sqrt(
-        Math.pow(nn.mouseX - dragInitialX, 2) +
-          Math.pow(nn.mouseY - dragInitialY, 2),
+        Math.pow(e.clientX - dragInitialX, 2) +
+          Math.pow(e.clientY - dragInitialY, 2),
       ) / DRAG_FACTOR;
     // finding angle from initial to mouse
-    let a = nn.radToDeg(
-      Math.atan2(dragInitialY - nn.mouseY, dragInitialX - nn.mouseX),
+    let a = RADTODEG_A(
+      Math.atan2(dragInitialY - e.clientY, dragInitialX - e.clientX),
     );
 
     if (cone) {
       for (let i = 0; i < CONE_DENSITY; i++) {
         SPAWNO_EXYDA(
-          nn.random(EMOJIS),
+          EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
           dragInitialX,
           dragInitialY,
-          nn.random(d / 2, d),
-          a + nn.random(-CONE_SPREAD, CONE_SPREAD),
+          Math.random() * (d - d / 2) + d / 2,
+          a + (Math.random() * (CONE_SPREAD * 2) - CONE_SPREAD),
         );
       }
     } else {
-      SPAWNO_EXYDA(nn.random(EMOJIS), dragInitialX, dragInitialY, d, a);
+      SPAWNO_EXYDA(
+        EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+        dragInitialX,
+        dragInitialY,
+        d,
+        a,
+      );
     }
+    b = Array.from(buffer);
+    undo.push(b);
+    buffer = [];
+    redo = [];
 
-    m.position(nn.mouseX, nn.mouseY);
-    l_s.position(dragInitialX, dragInitialY);
-    l_e.position(nn.mouseX, nn.mouseY);
+    //m.position(e.clientX, e.clientY);
+    POSITIONO_OXY(m, e.clientX, e.clientY);
+    //l_s.position(dragInitialX, dragInitialY);
+    POSITIONO_OXY(l_s, dragInitialX, dragInitialY);
+    //l_e.position(e.clientX, e.clientY);
+    POSITIONO_OXY(l_e, e.clientX, e.clientY);
   }
 
   // stop dragging event
@@ -234,14 +300,26 @@ right click to create a burst of random emojis
     burst = true;
 
     for (let i = 0; i < BURST_DENSITY; i++) {
-      let d = nn.random(MIN_DISTANCE, MAX_DISTANCE);
-      let a = nn.random(360);
+      let d = Math.random() * (MAX_DISTANCE - MIN_DISTANCE) + MIN_DISTANCE;
+      let a = Math.random() * 360;
 
-      SPAWNO_EXYDA(nn.random(EMOJIS), dragInitialX, dragInitialY, d, a);
+      SPAWNO_EXYDA(
+        EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+        dragInitialX,
+        dragInitialY,
+        d,
+        a,
+      );
     }
+    let a = Array.from(buffer);
+    undo.push(a);
+    buffer = [];
+    redo = [];
 
-    l_s.position(dragInitialX, dragInitialY);
-    l_e.position(nn.mouseX, nn.mouseY);
+    //l_s.position(dragInitialX, dragInitialY);
+    POSITIONO_OXY(l_s, dragInitialX, dragInitialY);
+    //l_e.position(e.clientX, e.clientY);
+    POSITIONO_OXY(l_e, e.clientX, e.clientY);
   });
 
   // listening for keyboard presses
@@ -250,6 +328,22 @@ right click to create a burst of random emojis
       cone = true;
     } else if (e.code == "ShiftLeft" || e.code == "ShiftRight") {
       draw = true;
+    } else if (e.code == "KeyZ") {
+      if (e.ctrlKey && e.shiftKey) {
+        let r = redo.pop();
+        r.forEach((o) => {
+          o.e_v = true;
+          c.appendChild(o);
+        });
+        undo.push(r);
+      } else if (e.ctrlKey) {
+        let u = undo.pop();
+        u.forEach((o) => {
+          o.e_v = false;
+          c.removeChild(o);
+        });
+        redo.push(u);
+      }
     }
   });
 
@@ -264,9 +358,9 @@ right click to create a burst of random emojis
   });
 
   // mouse cursor follows when not dragging
-  window.addEventListener("mousemove", () => {
+  window.addEventListener("mousemove", (e) => {
     if (!dragging) {
-      m.position(nn.mouseX, nn.mouseY);
+      POSITIONO_OXY(m, e.clientX, e.clientY);
     }
   });
 
